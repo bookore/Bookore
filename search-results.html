@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results - Book Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f6f8fd 0%, #f1f4f9 100%);
+            margin: 0;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .search-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+            margin-top: 90px;
+        }
+
+        .search-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .search-header h1 {
+            color: #1f2937;
+            margin: 0;
+            font-size: 2rem;
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .search-count {
+            color: #6b7280;
+            font-size: 1.1rem;
+            padding: 0.5rem 1rem;
+            background: #f3f4f6;
+            border-radius: 8px;
+        }
+
+        .search-results {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            padding: 1rem;
+        }
+
+        .book-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            position: relative;
+        }
+
+        .book-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 380px;
+            background: linear-gradient(0deg, rgba(248,250,252,0.5) 0%, rgba(248,250,252,0) 100%);
+            pointer-events: none;
+        }
+
+        .book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .book-image {
+            width: 100%;
+            height: 380px;
+            object-fit: contain;
+            padding: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+            background: #f8fafc;
+        }
+
+        .book-info {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .book-title {
+            font-size: 1.3rem;
+            color: #1f2937;
+            margin: 0 0 0.5rem 0;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        .book-author {
+            color: #6b7280;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            font-style: italic;
+        }
+
+        .book-details {
+            margin-top: auto;
+        }
+
+        .book-price {
+            font-size: 1.3rem;
+            color: #2563eb;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .book-price::before {
+            content: '₹';
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+
+        .add-to-cart {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 8px;
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+        }
+
+        .add-to-cart:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37,99,235,0.2);
+        }
+
+        /* No Results Styles */
+        .no-results {
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin: 2rem auto;
+            width: 700px;
+            height: 1000px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .no-results h2 {
+            color: #1f2937;
+            font-size: 1.8rem;
+            margin: 0 0 0.8rem 0;
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .no-results p {
+            color: #6b7280;
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Request Form Styles */
+        .request-form {
+            width: 90%;
+            margin: 0 auto;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            flex: 1;
+        }
+
+        .request-form::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #2563eb, #3b82f6, #60a5fa);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.3rem;
+            color: #4b5563;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            background: #f9fafb;
+            resize: none;
+            height: 42px;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 4px rgba(37,99,235,0.1);
+            outline: none;
+            background: white;
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: #9ca3af;
+        }
+
+        .submit-request {
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            width: 100%;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            height: 42px;
+            margin-top: 0.5rem;
+        }
+
+        .submit-request:hover {
+            background: #1d4ed8;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(37,99,235,0.2);
+        }
+
+        .submit-request:active {
+            transform: translateY(-1px);
+        }
+
+        .success-message {
+            background: linear-gradient(135deg, #059669, #10b981);
+            color: white;
+            padding: 0.8rem;
+            border-radius: 8px;
+            margin-top: 0.8rem;
+            display: none;
+            animation: successIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            text-align: center;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .success-message svg {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 0.3rem;
+            animation: checkmark 0.8s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+        }
+
+        @keyframes successIn {
+            0% { transform: translateY(-20px) scale(0.8); opacity: 0; }
+            50% { transform: translateY(10px) scale(1.1); }
+            100% { transform: translateY(0) scale(1); opacity: 1; }
+        }
+
+        @keyframes checkmark {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .redirect-countdown {
+            display: block;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            opacity: 0.9;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+                height: 60px;
+            }
+
+            .search-container {
+                padding: 1rem;
+                margin-top: 80px;
+            }
+
+            .no-results {
+                width: 100%;
+                height: auto;
+                min-height: 1000px;
+                padding: 2rem 1.5rem;
+                margin: 1rem auto;
+            }
+
+            .no-results h2 {
+                font-size: 1.5rem;
+            }
+
+            .request-form {
+                margin: 1rem auto;
+                padding: 1.5rem;
+                width: 95%;
+            }
+
+            .form-group {
+                margin-bottom: 1rem;
+            }
+
+            .form-group input,
+            .form-group textarea {
+                padding: 0.8rem 1rem;
+            }
+
+            .submit-request {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                padding: 0.8rem;
+                height: 50px;
+            }
+
+            .logo {
+                font-size: 1.2rem;
+            }
+
+            .logo img {
+                height: 32px;
+            }
+
+            .search-container {
+                padding: 0.5rem;
+                margin-top: 70px;
+            }
+
+            .no-results {
+                width: 100%;
+                min-height: 800px;
+                padding: 1.5rem 1rem;
+            }
+
+            .no-results h2 {
+                font-size: 1.3rem;
+            }
+
+            .no-results p {
+                font-size: 1rem;
+            }
+
+            .request-form {
+                width: 100%;
+                padding: 1.25rem;
+            }
+        }
+
+        /* Header Styles */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            height: 70px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #1f2937;
+            font-weight: 600;
+            font-size: 1.5rem;
+        }
+
+        .logo img {
+            height: 40px;
+            margin-right: 0.5rem;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .cart-icon {
+            position: relative;
+            background: white;
+            padding: 0.5rem;
+            border-radius: 50%;
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+        }
+
+        .cart-icon a {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #1f2937;
+        }
+
+        #cartCount {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ef4444;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        /* Modal Styles */
+        .request-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1100;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .request-modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            transform: translateY(-20px);
+            transition: transform 0.3s ease;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .request-modal.show .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-content h3 {
+            color: #1f2937;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .modal-content p {
+            color: #6b7280;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .modal-btn {
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .confirm-btn {
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            color: white;
+        }
+
+        .confirm-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        }
+
+        .cancel-btn {
+            background: #f3f4f6;
+            color: #4b5563;
+        }
+
+        .cancel-btn:hover {
+            background: #e5e7eb;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-left">
+            <a href="index.html" class="logo">
+                <img src="logo.png" alt="Bookore Logo">
+                Bookore
+            </a>
+        </div>
+        <div class="header-right">
+            <div class="cart-icon">
+                <a href="cart.html">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                    <span id="cartCount">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="search-container">
+        <div class="search-header">
+            <h1>Search Results</h1>
+            <span class="search-count" id="resultCount"></span>
+        </div>
+        <div id="searchResults" class="search-results">
+            <!-- Results will be loaded here -->
+        </div>
+    </div>
+
+    <!-- Request Modal -->
+    <div class="request-modal" id="requestModal">
+        <div class="modal-content">
+            <h3>Would you like to request this book?</h3>
+            <p>We'll notify you as soon as the book becomes available in our store. You can help us by providing some details about the book you're looking for.</p>
+            <div class="modal-buttons">
+                <button class="modal-btn confirm-btn" onclick="showRequestForm()">Yes, Request Book</button>
+                <button class="modal-btn cancel-btn" onclick="closeModal()">No, Thanks</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Available books database (in real app, this would come from backend)
+        const availableBooks = [
+            {
+                id: 1,
+                title: "Atomic Habits",
+                author: "James Clear",
+                price: 499,
+                image: "Atomic Habit.png",
+                category: "Self-Help"
+            },
+            {
+                id: 2,
+                title: "Rich Dad Poor Dad",
+                author: "Robert Kiyosaki",
+                price: 399,
+                image: "rich-dad-poor-dad-9.jpg",
+                category: "Finance"
+            },
+            {
+                id: 3,
+                title: "The 5 AM Club",
+                author: "Robin Sharma",
+                price: 349,
+                image: "5am club.jpg",
+                category: "Self-Help"
+            },
+            {
+                id: 4,
+                title: "The Psychology of Money",
+                author: "Morgan Housel",
+                price: 299,
+                image: "psychology of money.jpg",
+                category: "Finance"
+            },
+            {
+                id: 5,
+                title: "Eat That Frog",
+                author: "Brian Tracy",
+                price: 249,
+                image: "eat that frog.jpg",
+                category: "Productivity"
+            }
+        ];
+
+        function searchBooks(query, category = 'All') {
+            if (!query.trim()) return availableBooks; // Show all books if query is empty
+            query = query.toLowerCase();
+            
+            // Improved search logic
+            const searchTerms = query.split(' ').filter(term => term.length > 0);
+            
+            return availableBooks.filter(book => {
+                if (category !== 'All' && book.category !== category) return false;
+                
+                const bookTitle = book.title.toLowerCase();
+                const bookAuthor = book.author.toLowerCase();
+                
+                // Check if all search terms are found in either title or author
+                return searchTerms.every(term => 
+                    bookTitle.includes(term) || bookAuthor.includes(term)
+                );
+            });
+        }
+
+        function showResults(results) {
+            const container = document.getElementById('searchResults');
+            const countElement = document.getElementById('resultCount');
+            
+            if (results.length === 0) {
+                // Clear previous content
+                container.innerHTML = '';
+                countElement.textContent = '0 results found';
+                // Show the modal first
+                document.getElementById('requestModal').classList.add('show');
+                return;
+            }
+
+            countElement.textContent = `${results.length} results found`;
+            
+            container.innerHTML = results.map(book => `
+                <div class="book-card">
+                    <img src="${book.image}" alt="${book.title}" class="book-image">
+                    <div class="book-info">
+                        <div>
+                            <h3 class="book-title">${book.title}</h3>
+                            <p class="book-author">by ${book.author}</p>
+                        </div>
+                        <div class="book-details">
+                            <p class="book-price">${book.price}</p>
+                            <button class="add-to-cart" onclick="addToCart(${book.id})">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                                </svg>
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function closeModal() {
+            document.getElementById('requestModal').classList.remove('show');
+            // Clear search input and redirect
+            const searchInput = document.querySelector('input[type="search"]');
+            if (searchInput) searchInput.value = '';
+            window.location.href = 'index.html';
+        }
+
+        function showRequestForm() {
+            // Hide the modal
+            document.getElementById('requestModal').classList.remove('show');
+            
+            // Show the request form
+            const container = document.getElementById('searchResults');
+            const countElement = document.getElementById('resultCount');
+            countElement.textContent = ''; // Clear the count
+            container.innerHTML = `
+                <div class="no-results">
+                    <h2>We Couldn't Find Your Book</h2>
+                    <p>Don't worry! Let us know which book you're looking for, and we'll try our best to make it available for you.</p>
+                    <div class="request-form">
+                        <form id="requestForm" onsubmit="submitRequest(event)">
+                            <div class="form-group">
+                                <label>Book Title*</label>
+                                <input type="text" id="bookTitle" required 
+                                       placeholder="Enter the book title">
+                            </div>
+                            <div class="form-group">
+                                <label>Author Name*</label>
+                                <input type="text" id="authorName" required
+                                       placeholder="Enter the author's name">
+                            </div>
+                            <div class="form-group">
+                                <label>ISBN (if known)</label>
+                                <input type="text" id="isbn" 
+                                       placeholder="Optional - Enter ISBN number">
+                            </div>
+                            <div class="form-group">
+                                <label>Additional Details</label>
+                                <textarea id="details" rows="4"
+                                          placeholder="Any specific edition or other details you're looking for?"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Your Email*</label>
+                                <input type="email" id="email" required
+                                       placeholder="We'll notify you when the book is available">
+                            </div>
+                            <button type="submit" class="submit-request">
+                                Request This Book
+                            </button>
+                        </form>
+                        <div class="success-message" id="successMessage">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                            <div>
+                                <strong>Thank you for your request!</strong>
+                                <p style="margin: 0.5rem 0">We'll notify you as soon as the book becomes available.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function submitRequest(event) {
+            event.preventDefault();
+            
+            // Get form data
+            const requestData = {
+                bookTitle: document.getElementById('bookTitle').value,
+                authorName: document.getElementById('authorName').value,
+                isbn: document.getElementById('isbn').value,
+                details: document.getElementById('details').value,
+                email: document.getElementById('email').value,
+                timestamp: new Date().toISOString()
+            };
+
+            // Store request in localStorage
+            const requests = JSON.parse(localStorage.getItem('bookRequests')) || [];
+            requests.push(requestData);
+            localStorage.setItem('bookRequests', JSON.stringify(requests));
+
+            // Show success message with countdown
+            const successMessage = document.getElementById('successMessage');
+            successMessage.style.display = 'block';
+            
+            // Start countdown
+            let countdown = 3;
+            const countdownSpan = document.createElement('span');
+            countdownSpan.className = 'redirect-countdown';
+            successMessage.appendChild(countdownSpan);
+            
+            const countdownInterval = setInterval(() => {
+                countdownSpan.textContent = `Redirecting to home page in ${countdown} seconds...`;
+                countdown--;
+                
+                if (countdown < 0) {
+                    clearInterval(countdownInterval);
+                    window.location.href = 'index.html';
+                }
+            }, 1000);
+
+            document.getElementById('requestForm').reset();
+        }
+
+        // On page load, get search params and show results
+        window.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const query = params.get('q') || '';
+            const category = params.get('category') || 'All';
+            
+            // Only search if there's a query
+            if (query.trim()) {
+                const results = searchBooks(query, category);
+                showResults(results);
+            } else {
+                // Show all books if no query
+                showResults(availableBooks);
+            }
+        });
+    </script>
+</body>
+</html> 

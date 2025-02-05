@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders - Book Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #f0f4ff 0%, #e6eeff 100%);
+            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .orders-container {
+            max-width: 1200px;
+            margin: 85px auto 3rem;
+            padding: 0 2rem;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .page-title {
+            font-size: 2.8rem;
+            font-weight: 800;
+            margin-bottom: 2.5rem;
+            letter-spacing: -0.02em;
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+            color: #1e3a8a;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+        .page-title span {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 10px rgba(59, 130, 246, 0.15);
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(to right, #3b82f6 0%, rgba(59, 130, 246, 0.1) 100%);
+        }
+
+        .page-title svg {
+            width: 40px;
+            height: 40px;
+            color: #2563eb;
+            flex-shrink: 0;
+            filter: drop-shadow(0 2px 4px rgba(37, 99, 235, 0.2));
+        }
+
+        .order-filters {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            padding: 1.2rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+            margin-bottom: 2.5rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .filter-btn {
+            padding: 0.8rem 2rem;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid #e5e7eb;
+            background: white;
+            color: #4b5563;
+            cursor: pointer;
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.25);
+        }
+
+        .order-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.06);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .order-card:hover {
+            transform: translateY(-5px) scale(1.01);
+            box-shadow: 0 8px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        .order-header {
+            background: linear-gradient(to right, #f8fafc, #f1f5f9);
+            padding: 1.8rem;
+            border-radius: 16px;
+            margin: -2.5rem -2.5rem 2rem -2.5rem;
+            border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .order-id {
+            font-size: 1.4rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.01em;
+        }
+
+        .order-date {
+            color: #6b7280;
+            font-size: 0.95rem;
+        }
+
+        .order-status {
+            padding: 0.7rem 1.5rem;
+            border-radius: 30px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-processing {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .status-delivered {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .order-items {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .order-item {
+            background: linear-gradient(to right, #f8fafc, #f1f5f9);
+            padding: 1.8rem;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(229, 231, 235, 0.5);
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .order-item:hover {
+            transform: translateX(8px);
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+
+        .item-image {
+            width: 130px;
+            height: 180px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            object-fit: cover;
+        }
+
+        .order-item:hover .item-image {
+            transform: scale(1.05);
+        }
+
+        .item-details {
+            flex: 1;
+        }
+
+        .item-title {
+            font-size: 1.2rem;
+            color: #1f2937;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .item-meta {
+            background: white;
+            padding: 1rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .meta-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .meta-label {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        .meta-value {
+            color: #1f2937;
+            font-weight: 500;
+        }
+
+        .order-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .order-total {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .action-btn {
+            padding: 1rem 2.5rem;
+            border-radius: 14px;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .track-btn {
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2);
+        }
+
+        .track-btn:hover {
+            box-shadow: 0 6px 25px rgba(37, 99, 235, 0.3);
+        }
+
+        .support-btn {
+            background: white;
+            color: #1e3a8a;
+            border: 2px solid #1e3a8a;
+        }
+
+        .support-btn:hover {
+            background: rgba(30, 58, 138, 0.05);
+        }
+
+        .no-orders {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 5rem 2rem;
+            border-radius: 24px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .no-orders svg {
+            width: 80px;
+            height: 80px;
+            color: #3b82f6;
+            margin-bottom: 2rem;
+            filter: drop-shadow(0 4px 8px rgba(59, 130, 246, 0.3));
+        }
+
+        .no-orders h3 {
+            font-size: 2rem;
+            color: #1f2937;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .no-orders p {
+            color: #6b7280;
+            margin-bottom: 2.5rem;
+            font-size: 1.1rem;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .explore-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+            color: white;
+            padding: 1.2rem 3rem;
+            border-radius: 16px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.25);
+            border: none;
+            cursor: pointer;
+            min-width: 280px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .explore-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transform: translateX(-100%);
+            transition: 0.5s;
+        }
+
+        .explore-btn:hover::before {
+            transform: translateX(100%);
+        }
+
+        .explore-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(37, 99, 235, 0.3);
+            background: linear-gradient(135deg, #1e3a8a, #2563eb);
+        }
+
+        .explore-btn svg {
+            width: 24px;
+            height: 24px;
+            stroke-width: 2.5;
+            transition: transform 0.3s ease;
+            margin-left: 0.5rem;
+        }
+
+        .explore-btn:hover svg {
+            transform: translateX(8px);
+        }
+
+        @media (max-width: 768px) {
+            .orders-container {
+                margin-top: 75px;
+                padding: 0 1rem;
+            }
+
+            .page-title {
+                font-size: 2.2rem;
+            }
+
+            .no-orders {
+                padding: 3rem 1.5rem;
+            }
+
+            .explore-btn {
+                width: 100%;
+                padding: 1rem 2rem;
+            }
+        }
+
+        /* Add staggered animation delay for cards */
+        .order-card:nth-child(1) { animation-delay: 0.1s; }
+        .order-card:nth-child(2) { animation-delay: 0.2s; }
+        .order-card:nth-child(3) { animation-delay: 0.3s; }
+        .order-card:nth-child(4) { animation-delay: 0.4s; }
+
+        /* Add these styles in the <style> section */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            height: 70px;
+            transition: transform 0.3s ease;
+        }
+
+        .header-hidden {
+            transform: translateY(-100%);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .search-container {
+            display: flex;
+            align-items: center;
+            background: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            width: 600px;
+            margin-left: 2rem;
+            border: 2px solid #e5e7eb;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .search-container:focus-within {
+            border-color: #2563eb;
+            box-shadow: 0 4px 20px rgba(37, 99, 235, 0.15);
+            transform: translateY(-1px);
+        }
+
+        .search-container select {
+            padding: 0.8rem 1.2rem;
+            border: none;
+            border-right: 2px solid #e5e7eb;
+            background: transparent;
+            color: #4b5563;
+            cursor: pointer;
+            outline: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .search-container select:hover {
+            background: #f8fafc;
+            color: #2563eb;
+        }
+
+        .search-input-wrapper {
+            position: relative;
+            flex: 1;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-container input {
+            flex: 1;
+            padding: 0.8rem 1.2rem;
+            border: none;
+            outline: none;
+            background: transparent;
+            color: #1f2937;
+            font-size: 0.95rem;
+            width: 100%;
+        }
+
+        .search-btn {
+            background: none;
+            border: none;
+            padding: 0.8rem 1.2rem;
+            cursor: pointer;
+            color: #6b7280;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-left: 2px solid #e5e7eb;
+        }
+
+        .search-btn:hover {
+            color: #2563eb;
+            background: #f0f5ff;
+        }
+
+        .clear-search {
+            position: absolute;
+            right: 12px;
+            background: none;
+            border: none;
+            padding: 4px;
+            cursor: pointer;
+            color: #9ca3af;
+            border-radius: 50%;
+            display: none;
+            transition: all 0.2s ease;
+        }
+
+        .clear-search:hover {
+            color: #ef4444;
+            background: #fee2e2;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 1024px) {
+            .search-container {
+                width: 400px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+            }
+            
+            .search-container {
+                display: none;
+            }
+        }
+
+        /* Add these styles to remove logo animations */
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #1f2937;
+            font-weight: 600;
+            font-size: 1.5rem;
+            transition: none !important;
+            transform: none !important;
+            animation: none !important;
+        }
+
+        .logo img {
+            height: 40px;
+            margin-right: 0.5rem;
+            transition: none !important;
+            transform: none !important;
+            animation: none !important;
+        }
+
+        .logo:hover {
+            transform: none !important;
+        }
+
+        .logo:hover img {
+            transform: none !important;
+            animation: none !important;
+        }
+
+        /* Override any existing animations */
+        .logo, .logo img {
+            -webkit-animation: none !important;
+            -moz-animation: none !important;
+            -o-animation: none !important;
+            animation: none !important;
+        }
+
+        /* Add glass morphism effect */
+        .order-card, .order-filters, .order-item {
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        /* Add subtle hover animations */
+        .filter-btn:hover:not(.active) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-3px);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="header-left">
+            <a href="index.html" class="logo">
+                <img src="logo.png" alt="Bookore Logo">
+                Bookore
+            </a>
+        </div>
+        
+        <div class="search-container">
+            <select>
+                <option>All</option>
+                <option>Best Sellers</option>
+                <option>New Releases</option>
+                <option>Fiction</option>
+                <option>Non-Fiction</option>
+                <option>Children's Books</option>
+                <option>Textbooks</option>
+                <option>Exam Preparation</option>
+                <option>Authors</option>
+                <option>Publishers</option>
+            </select>
+            <div class="search-input-wrapper">
+                <input type="text" placeholder="Search Books, Authors or ISBNs">
+                <button class="clear-search" style="display: none;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <button class="search-btn" onclick="handleSearch()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+            </button>
+        </div>
+
+        <div class="header-right">
+            <div class="cart-icon">
+                <a href="cart.html">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                    <span id="cartCount">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="orders-container">
+        <h1 class="page-title">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+            </svg>
+            <span>My Orders</span>
+        </h1>
+
+        <div class="order-filters">
+            <button class="filter-btn active">All Orders</button>
+            <button class="filter-btn">Processing</button>
+            <button class="filter-btn">Delivered</button>
+            <button class="filter-btn">Cancelled</button>
+        </div>
+
+        <div id="ordersList"></div>
+    </div>
+
+    <script>
+        function loadOrders() {
+            const ordersList = document.getElementById('ordersList');
+            const userOrders = JSON.parse(localStorage.getItem('userOrders')) || [];
+
+            if (userOrders.length === 0) {
+                ordersList.innerHTML = `
+                    <div class="no-orders">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                        </svg>
+                        <h3>No Orders Yet</h3>
+                        <p>Looks like you haven't made any orders yet. Start shopping to explore amazing books!</p>
+                        <a href="index.html" class="explore-btn">
+                            Start Shopping
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 12h16m0 0l-6-6m6 6l-6 6"/>
+                            </svg>
+                        </a>
+                    </div>
+                `;
+                return;
+            }
+
+            ordersList.innerHTML = userOrders.map(order => `
+                <div class="order-card">
+                    <div class="order-header">
+                        <span class="order-id">Order ${order.orderId}</span>
+                        <span class="order-date">
+                            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                            ${new Date(order.date).toLocaleDateString('en-US', { 
+                                year: 'numeric', 
+                                month: 'long', 
+                                day: 'numeric' 
+                            })}
+                        </span>
+                        <span class="order-status status-${order.status.toLowerCase()}">
+                            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            ${order.status}
+                        </span>
+                    </div>
+                    <div class="order-items">
+                        ${order.items.map(item => `
+                            <div class="order-item">
+                                <img src="${item.image}" alt="${item.title}" class="item-image">
+                                <div class="item-details">
+                                    <h3 class="item-title">${item.title}</h3>
+                                    <div class="item-meta">
+                                        <div class="meta-item">
+                                            <span class="meta-label">Price</span>
+                                            <span class="meta-value">₹${item.price}</span>
+                                        </div>
+                                        <div class="meta-item">
+                                            <span class="meta-label">Quantity</span>
+                                            <span class="meta-value">${item.quantity}</span>
+                                        </div>
+                                        <div class="meta-item">
+                                            <span class="meta-label">Subtotal</span>
+                                            <span class="meta-value">₹${item.price * item.quantity}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="order-footer">
+                        <div class="order-total">
+                            Total: ₹${order.total}
+                        </div>
+                        <div class="action-buttons">
+                            <button class="action-btn track-btn">
+                                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                                </svg>
+                                Track Order
+                            </button>
+                            <button class="action-btn support-btn">
+                                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                        d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                Need Help?
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', () => {
+            loadOrders();
+
+            // Add filter functionality
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    // Add filter logic here
+                });
+            });
+        });
+
+        // Update cart count
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const cartCount = document.getElementById('cartCount');
+            const count = cart.reduce((total, item) => total + item.quantity, 0);
+            cartCount.textContent = count;
+            cartCount.style.display = count > 0 ? 'flex' : 'none';
+        }
+
+        // Handle search
+        function handleSearch() {
+            const searchInput = document.querySelector('.search-container input');
+            const searchCategory = document.querySelector('.search-container select');
+            
+            if (searchInput.value.trim() !== '') {
+                const searchQuery = encodeURIComponent(searchInput.value);
+                const category = encodeURIComponent(searchCategory.value);
+                window.location.href = `search-results.html?q=${searchQuery}&category=${category}`;
+            } else {
+                searchInput.focus();
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCartCount();
+            
+            // Add search input handlers
+            const searchInput = document.querySelector('.search-container input');
+            const clearButton = document.querySelector('.clear-search');
+            
+            searchInput.addEventListener('input', function() {
+                clearButton.style.display = this.value.length > 0 ? 'flex' : 'none';
+            });
+
+            clearButton.addEventListener('click', function() {
+                searchInput.value = '';
+                this.style.display = 'none';
+                searchInput.focus();
+            });
+
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    handleSearch();
+                }
+            });
+        });
+
+        // Add this script for header auto-hide
+        let lastScroll = 0;
+        const header = document.querySelector('.header');
+
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll <= 0) {
+                header.classList.remove('header-hidden');
+                return;
+            }
+            
+            if (currentScroll > lastScroll && !header.classList.contains('header-hidden')) {
+                // Scrolling down
+                header.classList.add('header-hidden');
+            } else if (currentScroll < lastScroll && header.classList.contains('header-hidden')) {
+                // Scrolling up
+                header.classList.remove('header-hidden');
+            }
+            
+            lastScroll = currentScroll;
+        });
+
+        // Filter orders based on status
+        function filterOrders(status) {
+            const userOrders = JSON.parse(localStorage.getItem('userOrders')) || [];
+            const filteredOrders = status === 'All Orders' 
+                ? userOrders 
+                : userOrders.filter(order => order.status === status);
+            displayOrders(filteredOrders);
+        }
+
+        // Display orders
+        function displayOrders(orders) {
+            const ordersList = document.getElementById('ordersList');
+            
+            if (orders.length === 0) {
+                ordersList.innerHTML = `
+                    <div class="no-orders">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                        </svg>
+                        <h3>No Orders Found</h3>
+                        <p>No orders match your current filter. Try a different filter or start shopping!</p>
+                        <a href="index.html" class="explore-btn">
+                            Start Shopping
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 12h16m0 0l-6-6m6 6l-6 6"/>
+                            </svg>
+                        </a>
+                    </div>
+                `;
+                return;
+            }
+
+            ordersList.innerHTML = orders.map(order => `
+                <div class="order-card" data-order-id="${order.orderId}">
+                    <div class="order-header">
+                        <span class="order-id">Order ${order.orderId}</span>
+                        <span class="order-date">
+                            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                            ${new Date(order.date).toLocaleDateString('en-US', { 
+                                year: 'numeric', 
+                                month: 'long', 
+                                day: 'numeric' 
+                            })}
+                        </span>
+                        <span class="order-status status-${order.status.toLowerCase()}">
+                            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            ${order.status}
+                        </span>
+                    </div>
+                    <div class="order-items">
+                        ${order.items.map(item => `
+                            <div class="order-item">
+                                <img src="${item.image}" alt="${item.title}" class="item-image">
+                                <div class="item-details">
+                                    <h3 class="item-title">${item.title}</h3>
+                                    <div class="item-meta">
+                                        <div class="meta-item">
+                                            <span class="meta-label">Price</span>
+                                            <span class="meta-value">₹${item.price}</span>
+                                        </div>
+                                        <div class="meta-item">
+                                            <span class="meta-label">Quantity</span>
+                                            <span class="meta-value">${item.quantity}</span>
+                                        </div>
+                                        <div class="meta-item">
+                                            <span class="meta-label">Subtotal</span>
+                                            <span class="meta-value">₹${item.price * item.quantity}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="order-footer">
+                        <div class="order-total">
+                            Total: ₹${order.total}
+                        </div>
+                        <div class="action-buttons">
+                            <button class="action-btn track-btn">
+                                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                                </svg>
+                                Track Order
+                            </button>
+                            <button class="action-btn support-btn">
+                                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                        d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                Need Help?
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Add event listeners to buttons
+            document.querySelectorAll('.track-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const orderId = this.closest('.order-card').dataset.orderId;
+                    trackOrder(orderId);
+                });
+            });
+
+            document.querySelectorAll('.support-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const orderId = this.closest('.order-card').dataset.orderId;
+                    openSupport(orderId);
+                });
+            });
+        }
+
+        // Track order function
+        function trackOrder(orderId) {
+            const orders = JSON.parse(localStorage.getItem('userOrders')) || [];
+            const order = orders.find(o => o.orderId === orderId);
+            
+            if (order) {
+                // You can implement actual tracking logic here
+                alert(`Tracking Order: ${orderId}\nStatus: ${order.status}`);
+            }
+        }
+
+        // Support function
+        function openSupport(orderId) {
+            // Implement your support logic here
+            window.location.href = `contact.html?orderId=${orderId}`;
+        }
+
+        // Initialize page with filters
+        document.addEventListener('DOMContentLoaded', () => {
+            // Load initial orders
+            filterOrders('All Orders');
+
+            // Add filter functionality
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    filterOrders(button.textContent);
+                });
+            });
+
+            // Check if redirected from successful order
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('orderSuccess')) {
+                showNotification('Order placed successfully!', 'success');
+            }
+        });
+
+        // Add this function to format currency
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-IN', {
+                style: 'currency',
+                currency: 'INR',
+                minimumFractionDigits: 2
+            }).format(amount);
+        }
+
+        // Add this function to format dates
+        function formatDate(dateString) {
+            return new Date(dateString).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+    </script>
+</body>
+</html> 

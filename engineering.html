@@ -1,0 +1,1670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Engineering Books - Bookore</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Enhanced gradients and animations */
+        .engineering-hero {
+            background: linear-gradient(135deg, #0f172a 0%, #1e40af 50%, #3b82f6 100%);
+            background-size: 200% 200%;
+            padding: 4rem 2rem;
+            color: white;
+            text-align: center;
+            margin-top: 70px;
+            position: relative;
+            overflow: hidden;
+            animation: gradientFlow 15s ease infinite;
+        }
+
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Add floating shapes */
+        .floating-shapes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .shape {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            animation: float 20s infinite;
+        }
+
+        .shape:nth-child(1) { width: 200px; height: 200px; left: -100px; top: -100px; }
+        .shape:nth-child(2) { width: 150px; height: 150px; right: -75px; bottom: -75px; animation-delay: -7s; }
+        .shape:nth-child(3) { width: 100px; height: 100px; right: 20%; top: 20%; animation-delay: -3s; }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 15px rgba(0,0,0,0.3);
+            background: linear-gradient(to right, #fff, #e2e8f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: titleGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes titleGlow {
+            from { text-shadow: 0 0 20px rgba(255,255,255,0.5); }
+            to { text-shadow: 0 0 30px rgba(255,255,255,0.8); }
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+
+        .filter-bar {
+            background: white;
+            padding: 1rem;
+            border-radius: 12px;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f3f4f6;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+            color: white;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2);
+        }
+
+        .filter-btn:hover:not(.active) {
+            transform: translateY(-2px);
+            background: #e5e7eb;
+        }
+
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            perspective: 1000px;
+        }
+
+        .book-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .book-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .book-card:hover .book-image {
+            transform: scale(1.05);
+        }
+
+        .book-info {
+            padding: 1.5rem;
+        }
+
+        .book-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #1f2937;
+        }
+
+        .book-author {
+            color: #6b7280;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .book-price {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #2563eb;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .original-price {
+            text-decoration: line-through;
+            color: #9ca3af;
+            font-size: 0.9rem;
+        }
+
+        .book-actions {
+            opacity: 1;
+            transform: translateY(0);
+            display: flex;
+            gap: 0.8rem;
+            padding: 1rem;
+            justify-content: center;
+        }
+
+        .action-btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            width: 48px;
+            height: 48px;
+            padding: 0;
+        }
+
+        .buy-btn {
+            background: #2563eb;
+            color: white;
+            box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .buy-btn::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 50%);
+            transition: all 0.3s ease;
+            opacity: 0;
+        }
+
+        .buy-btn:hover::after {
+            opacity: 1;
+        }
+
+        .cart-btn {
+            background: #f3f4f6;
+            color: #1f2937;
+            border: 1px solid #e5e7eb;
+            border-radius: 50%;
+        }
+
+        .action-btn svg {
+            width: 24px;
+            height: 24px;
+            stroke-width: 1.5px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .buy-btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.5);
+        }
+
+        .cart-btn:hover {
+            background: #e5e7eb;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .books-grid {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+                padding: 1rem;
+            }
+
+            .filter-bar {
+                padding: 0.5rem;
+            }
+
+            .filter-btn {
+                padding: 0.4rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Add styles for section labels and discount badge */
+        .section-label {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #1e40af;
+            margin: 3rem 0 2rem;
+            padding-left: 2rem;
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .section-label::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, #2563eb, #3b82f6);
+            border-radius: 2px;
+        }
+
+        .discount-badge {
+            background: linear-gradient(135deg, #059669, #34d399);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: auto;
+        }
+
+        /* Add styles for book rating */
+        .book-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 0.5rem 0;
+            color: #fbbf24;
+        }
+
+        .rating-count {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        /* Updated Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 0.8rem 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 1000;
+            height: 70px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            transition: none;
+        }
+
+        .logo img {
+            height: 40px;
+            width: auto;
+            transform: none;
+            animation: none;
+            transition: none;
+        }
+
+        .logo:hover {
+            transform: none;
+            animation: none;
+        }
+
+        .header-center {
+            flex: 1;
+            max-width: 600px;
+            margin: 0 2rem;
+        }
+
+        .search-container {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            background: white;
+            border: 2px solid #dde1e6;
+            border-radius: 12px;
+            padding: 0.5rem;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .search-container:focus-within {
+            border-color: #3b82f6;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+        }
+
+        .search-container select {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-right: 2px solid #e5e7eb;
+            font-size: 0.95rem;
+            color: #4b5563;
+            background: transparent;
+            cursor: pointer;
+            outline: none;
+            min-width: 140px;
+        }
+
+        .search-container input {
+            flex: 1;
+            border: none;
+            outline: none;
+            padding: 0.5rem;
+            font-size: 0.95rem;
+            color: #1f2937;
+            background: transparent;
+        }
+
+        .search-container input::placeholder {
+            color: #9ca3af;
+        }
+
+        .clear-search, .search-btn {
+            padding: 0.5rem;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            color: #6b7280;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .clear-search:hover, .search-btn:hover {
+            background: #f3f4f6;
+            color: #2563eb;
+        }
+
+        .search-btn {
+            background: #3b82f6;
+            color: white;
+            padding: 0.5rem;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+        }
+
+        .search-btn:hover {
+            background: #2563eb;
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+        }
+
+        .search-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .cart-icon {
+            position: relative;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+
+        .cart-icon:hover {
+            background: #f3f4f6;
+        }
+
+        .cart-icon a {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #1f2937;
+        }
+
+        #cartCount {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ef4444;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        /* Update the toast container and notification styles */
+        .toast-container {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .toast {
+            background: white;
+            border-radius: 16px;
+            padding: 1rem 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: slideUpIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            border: 1px solid #e5e7eb;
+            max-width: 300px;
+            transform: translateY(120%);
+            backdrop-filter: blur(8px);
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .toast.success {
+            border-left: 4px solid #059669;
+            border-top: 1px solid rgba(255, 255, 255, 0.8);
+            border-right: 1px solid rgba(255, 255, 255, 0.8);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .toast-icon {
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+            color: #059669;
+            animation: scaleIn 0.3s ease forwards 0.2s;
+            transform: scale(0);
+        }
+
+        .toast-content {
+            flex-grow: 1;
+            animation: fadeIn 0.3s ease forwards 0.1s;
+            opacity: 0;
+        }
+
+        .toast-title {
+            font-weight: 600;
+            color: #1F2937;
+            margin-bottom: 2px;
+            font-size: 1rem;
+            letter-spacing: -0.01em;
+        }
+
+        .toast-message {
+            color: #6B7280;
+            font-size: 0.875rem;
+            line-height: 1.4;
+        }
+
+        @keyframes slideUpIn {
+            from {
+                transform: translateY(120%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideDownOut {
+            from {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateY(120%);
+                opacity: 0;
+            }
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0); }
+            to { transform: scale(1); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Updated Header -->
+    <header class="header">
+        <div class="header-left">
+            <a href="index.html" class="logo">
+                <img src="logo.png" alt="Book Store Logo">
+            </a>
+        </div>
+
+        <div class="header-center">
+            <div class="search-container">
+                <select id="searchCategory">
+                    <option value="all">All Categories</option>
+                    <option value="engineering" selected>Engineering</option>
+                    <option value="medical">Medical</option>
+                    <option value="arts">Arts</option>
+                    <option value="commerce">Commerce</option>
+                </select>
+                <input 
+                    type="text" 
+                    id="searchInput"
+                    placeholder="Search for engineering books, authors, or topics..."
+                    autocomplete="off"
+                >
+                <button class="clear-search" style="display: none;">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+                <button class="search-btn" title="Search">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="header-right">
+            <div class="cart-icon">
+                <a href="cart.html">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                    </svg>
+                    <span id="cartCount">0</span>
+                </a>
+            </div>
+            <button class="menu-button" onclick="toggleMenu()">
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+            </button>
+        </div>
+    </header>
+
+    <!-- Add floating shapes -->
+    <div class="floating-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+
+    <section class="engineering-hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Engineering Books</h1>
+            <p class="hero-subtitle">Discover comprehensive engineering resources for all branches</p>
+            <div class="filter-bar">
+                <button class="filter-btn active">All</button>
+                <button class="filter-btn" data-category="computer-science">Computer Science</button>
+                <button class="filter-btn" data-category="mechanical">Mechanical</button>
+                <button class="filter-btn" data-category="electrical">Electrical</button>
+                <button class="filter-btn" data-category="civil">Civil</button>
+                <button class="filter-btn" data-category="electronics">Electronics</button>
+                <button class="filter-btn" data-category="jee">JEE</button>
+                <button class="filter-btn" data-category="gate">GATE</button>
+                <button class="filter-btn" data-category="ese">ESE</button>
+            </div>
+        </div>
+    </section>
+
+    <div class="books-grid">
+        <!-- Computer Science Section -->
+        <div class="book-card" data-category="computer-science">
+            <img src="#" alt="Data Structures and Algorithms" class="book-image">
+            <div class="book-info">
+                <h3 class="book-title">Data Structures and Algorithms</h3>
+                <p class="book-author">by Thomas H. Cormen</p>
+                <div class="book-rating">★★★★★ <span class="rating-count">(2.5k reviews)</span></div>
+                <div class="book-price">₹599 <span class="original-price">₹799</span>
+                    <span class="discount-badge">25% OFF</span>
+                </div>
+                <div class="book-actions">
+                    <button class="action-btn buy-btn" title="Buy Now">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
+                        </svg>
+                    </button>
+                    <button class="action-btn cart-btn" title="Add to Cart">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="book-card" data-category="computer-science">
+            <img src="images/python-book.jpg" alt="Python Programming" class="book-image">
+            <div class="book-info">
+                <h3 class="book-title">Python Programming</h3>
+                <p class="book-author">by Eric Matthes</p>
+                <div class="book-rating">★★★★☆ <span class="rating-count">(1.8k reviews)</span></div>
+                <div class="book-price">₹499 <span class="original-price">₹699</span>
+                    <span class="discount-badge">30% OFF</span>
+                </div>
+                <div class="book-actions">
+                    <button class="action-btn buy-btn" title="Buy Now">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </button>
+                    <button class="action-btn cart-btn" title="Add to Cart">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="book-card" data-category="computer-science">
+            <img src="images/java-book.jpg" alt="Java Programming" class="book-image">
+            <div class="book-info">
+                <h3 class="book-title">Java: The Complete Reference</h3>
+                <p class="book-author">by Herbert Schildt</p>
+                <div class="book-rating">★★★★★ <span class="rating-count">(1.5k reviews)</span></div>
+                <div class="book-price">₹649 <span class="original-price">₹899</span>
+                    <span class="discount-badge">28% OFF</span>
+                </div>
+                <div class="book-actions">
+                    <button class="action-btn buy-btn" title="Buy Now">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </button>
+                    <button class="action-btn cart-btn" title="Add to Cart">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="book-card" data-category="computer-science">
+            <img src="images/web-dev.jpg" alt="Web Development" class="book-image">
+            <div class="book-info">
+                <h3 class="book-title">Full Stack Development</h3>
+                <p class="book-author">by Angela Yu</p>
+                <div class="book-rating">★★★★☆ <span class="rating-count">(2.1k reviews)</span></div>
+                <div class="book-price">₹799 <span class="original-price">₹999</span>
+                    <span class="discount-badge">20% OFF</span>
+                </div>
+                <div class="book-actions">
+                    <button class="action-btn buy-btn" title="Buy Now">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </button>
+                    <button class="action-btn cart-btn" title="Add to Cart">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mechanical Engineering Section -->
+        <div class="book-card" data-category="mechanical">
+            <img src="images/thermo-book.jpg" alt="Engineering Thermodynamics" class="book-image">
+            <div class="book-info">
+                <h3 class="book-title">Engineering Thermodynamics</h3>
+                <p class="book-author">by P.K. Nag</p>
+                <div class="book-rating">★★★★★ <span class="rating-count">(1.2k reviews)</span></div>
+                <div class="book-price">₹449 <span class="original-price">₹649</span>
+                    <span class="discount-badge">30% OFF</span>
+                </div>
+                <div class="book-actions">
+                    <button class="action-btn buy-btn" title="Buy Now">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </button>
+                    <button class="action-btn cart-btn" title="Add to Cart">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="book-card" data-category="mechanical">
+            <img src="images/mechanics-book.jpg" alt="Engineering Mechanics" class="book-image">
+            <div class="book-info">
+                <h3 class="book-title">Engineering Mechanics</h3>
+                <p class="book-author">by R.S. Khurmi</p>
+                <div class="book-rating">★★★★☆ <span class="rating-count">(950 reviews)</span></div>
+                <div class="book-price">₹399 <span class="original-price">₹599</span>
+                    <span class="discount-badge">33% OFF</span>
+                </div>
+                <div class="book-actions">
+                    <button class="action-btn buy-btn" title="Buy Now">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </button>
+                    <button class="action-btn cart-btn" title="Add to Cart">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="book-card" data-category="mechanical">
+            <img src="images/fluid-mechanics.jpg" alt="Fluid Mechanics" class="book-image">
+            <div class="book-info">
+                <h3 class="book-title">Fluid Mechanics</h3>
+                <p class="book-author">by Frank M. White</p>
+                <div class="book-rating">★★★★★ <span class="rating-count">(800 reviews)</span></div>
+                <div class="book-price">₹549 <span class="original-price">₹749</span>
+                    <span class="discount-badge">27% OFF</span>
+                </div>
+                <div class="book-actions">
+                    <button class="action-btn buy-btn" title="Buy Now">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </button>
+                    <button class="action-btn cart-btn" title="Add to Cart">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="book-card" data-category="mechanical">
+            <img src="images/machine-design.jpg" alt="Machine Design" class="book-image">
+            <div class="book-info">
+                <h3 class="book-title">Machine Design</h3>
+                <p class="book-author">by V.B. Bhandari</p>
+                <div class="book-rating">★★★★☆ <span class="rating-count">(650 reviews)</span></div>
+                <div class="book-price">₹499 <span class="original-price">₹699</span>
+                    <span class="discount-badge">29% OFF</span>
+                </div>
+                <div class="book-actions">
+                    <button class="action-btn buy-btn" title="Buy Now">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </button>
+                    <button class="action-btn cart-btn" title="Add to Cart">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Electrical Engineering Section -->
+        <div class="book-card" data-category="electrical">
+            <img src="images/circuits-book.jpg" alt="Electric Circuits" class="book-image">
+            <div class="book-info">
+                <h3 class="book-title">Electric Circuits Analysis</h3>
+                <p class="book-author">by J.B. Gupta</p>
+                <div class="book-rating">★★★★☆ <span class="rating-count">(950 reviews)</span></div>
+                <div class="book-price">₹399 <span class="original-price">₹599</span>
+                    <span class="discount-badge">33% OFF</span>
+                </div>
+                <div class="book-actions">
+                    <button class="action-btn buy-btn" title="Buy Now">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </button>
+                    <button class="action-btn cart-btn" title="Add to Cart">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="book-card" data-category="electrical">
+            <img src="images/power-systems.jpg" alt="Power Systems" class="book-image">
+            <div class="book-info">
+                <h3 class="book-title">Power Systems Engineering</h3>
+                <p class="book-author">by D.P. Kothari</p>
+                <div class="book-rating">★★★★★ <span class="rating-count">(750 reviews)</span></div>
+                <div class="book-price">₹549 <span class="original-price">₹749</span>
+                    <span class="discount-badge">27% OFF</span>
+                </div>
+                <div class="book-actions">
+                    <button class="action-btn buy-btn" title="Buy Now">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </button>
+                    <button class="action-btn cart-btn" title="Add to Cart">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="book-card" data-category="electrical">
+            <img src="images/electronics.jpg" alt="Electronics" class="book-image">
+            <div class="book-info">
+                <h3 class="book-title">Electronic Devices</h3>
+                <p class="book-author">by Thomas L. Floyd</p>
+                <div class="book-rating">★★★★★ <span class="rating-count">(920 reviews)</span></div>
+                <div class="book-price">₹599 <span class="original-price">₹849</span>
+                    <span class="discount-badge">29% OFF</span>
+                </div>
+                <div class="book-actions">
+                    <button class="action-btn buy-btn" title="Buy Now">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </button>
+                    <button class="action-btn cart-btn" title="Add to Cart">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="book-card" data-category="electrical">
+            <img src="images/control-systems.jpg" alt="Control Systems" class="book-image">
+            <div class="book-info">
+                <h3 class="book-title">Control Systems Engineering</h3>
+                <p class="book-author">by Norman S. Nise</p>
+                <div class="book-rating">★★★★☆ <span class="rating-count">(780 reviews)</span></div>
+                <div class="book-price">₹649 <span class="original-price">₹899</span>
+                    <span class="discount-badge">28% OFF</span>
+                </div>
+                <div class="book-actions">
+                    <button class="action-btn buy-btn" title="Buy Now">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </button>
+                    <button class="action-btn cart-btn" title="Add to Cart">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Civil Engineering Section -->
+        <div class="book-card" data-category="civil">
+            <img src="images/structural-analysis.jpg" alt="Structural Analysis" class="book-image">
+            <div class="book-info">
+                <h3 class="book-title">Structural Analysis</h3>
+                <p class="book-author">by R.C. Hibbeler</p>
+                <div class="book-rating">★★★★★ <span class="rating-count">(1.3k reviews)</span></div>
+                <div class="book-price">₹549 <span class="original-price">₹749</span>
+                    <span class="discount-badge">27% OFF</span>
+                </div>
+                <div class="book-actions">
+                    <button class="action-btn buy-btn" title="Buy Now">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </button>
+                    <button class="action-btn cart-btn" title="Add to Cart">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="book-card" data-category="civil">
+            <img src="images/soil-mechanics.jpg" alt="Soil Mechanics and Foundations" class="book-image">
+            <div class="book-info">
+                <h3 class="book-title">Soil Mechanics and Foundations</h3>
+                <p class="book-author">by B.C. Punmia</p>
+                <div class="book-rating">★★★★☆ <span class="rating-count">(950 reviews)</span></div>
+                <div class="book-price">₹499 <span class="original-price">₹699</span>
+                    <span class="discount-badge">29% OFF</span>
+                </div>
+                <div class="book-actions">
+                    <button class="action-btn buy-btn" title="Buy Now">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </button>
+                    <button class="action-btn cart-btn" title="Add to Cart">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="book-card" data-category="civil">
+            <img src="images/concrete-tech.jpg" alt="Concrete Technology" class="book-image">
+            <div class="book-info">
+                <h3 class="book-title">Concrete Technology</h3>
+                <p class="book-author">by M.S. Shetty</p>
+                <div class="book-rating">★★★★★ <span class="rating-count">(850 reviews)</span></div>
+                <div class="book-price">₹599 <span class="original-price">₹799</span>
+                    <span class="discount-badge">25% OFF</span>
+                </div>
+                <div class="book-actions">
+                    <button class="action-btn buy-btn" title="Buy Now">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </button>
+                    <button class="action-btn cart-btn" title="Add to Cart">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="book-card" data-category="civil">
+            <img src="images/surveying.jpg" alt="Surveying" class="book-image">
+            <div class="book-info">
+                <h3 class="book-title">Surveying and Levelling</h3>
+                <p class="book-author">by N.N. Basak</p>
+                <div class="book-rating">★★★★☆ <span class="rating-count">(720 reviews)</span></div>
+                <div class="book-price">₹449 <span class="original-price">₹649</span>
+                    <span class="discount-badge">31% OFF</span>
+                </div>
+                <div class="book-actions">
+                    <button class="action-btn buy-btn" title="Buy Now">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </button>
+                    <button class="action-btn cart-btn" title="Add to Cart">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- After existing Computer Science books -->
+        <div class="book-card" data-category="computer-science">
+            <img src="images/ai-ml.jpg" alt="AI and Machine Learning" class="book-image">
+            <div class="book-info">
+                <h3 class="book-title">AI and Machine Learning</h3>
+                <p class="book-author">by Sebastian Raschka</p>
+                <div class="book-rating">★★★★★ <span class="rating-count">(1.9k reviews)</span></div>
+                <div class="book-price">₹749 <span class="original-price">₹999</span>
+                    <span class="discount-badge">25% OFF</span>
+                </div>
+                <div class="book-actions">
+                    <button class="action-btn buy-btn" title="Buy Now">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </button>
+                    <button class="action-btn cart-btn" title="Add to Cart">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="book-card" data-category="computer-science">
+            <img src="images/cloud-computing.jpg" alt="Cloud Computing" class="book-image">
+            <div class="book-info">
+                <h3 class="book-title">Cloud Computing Concepts</h3>
+                <p class="book-author">by Martin Fowler</p>
+                <div class="book-rating">★★★★☆ <span class="rating-count">(1.2k reviews)</span></div>
+                <div class="book-price">₹649 <span class="original-price">₹899</span>
+                    <span class="discount-badge">28% OFF</span>
+                </div>
+                <div class="book-actions">
+                    <button class="action-btn buy-btn" title="Buy Now">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </button>
+                    <button class="action-btn cart-btn" title="Add to Cart">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Electronics Engineering Section -->
+        <div class="book-card" data-category="electronics">
+            <img src="images/digital-electronics.jpg" alt="Digital Electronics" class="book-image">
+            <div class="book-info">
+                <h3 class="book-title">Digital Electronics</h3>
+                <p class="book-author">by Morris Mano</p>
+                <div class="book-rating">★★★★★ <span class="rating-count">(1.5k reviews)</span></div>
+                <div class="book-price">₹599 <span class="original-price">₹799</span>
+                    <span class="discount-badge">25% OFF</span>
+                </div>
+                <div class="book-actions">
+                    <button class="action-btn buy-btn" title="Buy Now">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </button>
+                    <button class="action-btn cart-btn" title="Add to Cart">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="book-card" data-category="electronics">
+            <img src="images/microprocessor.jpg" alt="Microprocessors" class="book-image">
+            <div class="book-info">
+                <h3 class="book-title">Microprocessors and Interfacing</h3>
+                <p class="book-author">by Douglas V. Hall</p>
+                <div class="book-rating">★★★★☆ <span class="rating-count">(980 reviews)</span></div>
+                <div class="book-price">₹549 <span class="original-price">₹749</span>
+                    <span class="discount-badge">27% OFF</span>
+                </div>
+                <div class="book-actions">
+                    <button class="action-btn buy-btn" title="Buy Now">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </button>
+                    <button class="action-btn cart-btn" title="Add to Cart">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add more Computer Science books -->
+        <div class="book-card" data-category="computer-science">
+            <img src="images/database.jpg" alt="Database Management" class="book-image">
+            <div class="book-info">
+                <h3 class="book-title">Database Management Systems</h3>
+                <p class="book-author">by Raghu Ramakrishnan</p>
+                <div class="book-rating">★★★★★ <span class="rating-count">(1.7k reviews)</span></div>
+                <div class="book-price">₹599 <span class="original-price">₹799</span>
+                    <span class="discount-badge">25% OFF</span>
+                </div>
+                <div class="book-actions">
+                    <button class="action-btn buy-btn" title="Buy Now">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </button>
+                    <button class="action-btn cart-btn" title="Add to Cart">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="book-card" data-category="computer-science">
+            <img src="images/operating-systems.jpg" alt="Operating Systems" class="book-image">
+            <div class="book-info">
+                <h3 class="book-title">Operating System Concepts</h3>
+                <p class="book-author">by Abraham Silberschatz</p>
+                <div class="book-rating">★★★★☆ <span class="rating-count">(2.2k reviews)</span></div>
+                <div class="book-price">₹699 <span class="original-price">₹899</span>
+                    <span class="discount-badge">22% OFF</span>
+                </div>
+                <div class="book-actions">
+                    <button class="action-btn buy-btn" title="Buy Now">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </button>
+                    <button class="action-btn cart-btn" title="Add to Cart">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="book-card" data-category="computer-science">
+            <img src="images/software-engineering.jpg" alt="Software Engineering" class="book-image">
+            <div class="book-info">
+                <h3 class="book-title">Software Engineering</h3>
+                <p class="book-author">by Ian Sommerville</p>
+                <div class="book-rating">★★★★★ <span class="rating-count">(1.4k reviews)</span></div>
+                <div class="book-price">₹749 <span class="original-price">₹999</span>
+                    <span class="discount-badge">25% OFF</span>
+                </div>
+                <div class="book-actions">
+                    <button class="action-btn buy-btn" title="Buy Now">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </button>
+                    <button class="action-btn cart-btn" title="Add to Cart">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="book-card" data-category="computer-science">
+            <img src="images/computer-networks.jpg" alt="Computer Networks" class="book-image">
+            <div class="book-info">
+                <h3 class="book-title">Computer Networking</h3>
+                <p class="book-author">by James F. Kurose</p>
+                <div class="book-rating">★★★★☆ <span class="rating-count">(1.6k reviews)</span></div>
+                <div class="book-price">₹649 <span class="original-price">₹849</span>
+                    <span class="discount-badge">24% OFF</span>
+                </div>
+                <div class="book-actions">
+                    <button class="action-btn buy-btn" title="Buy Now">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </button>
+                    <button class="action-btn cart-btn" title="Add to Cart">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- JEE Section -->
+        <div class="book-card" data-category="jee">
+            <img src="images/jee-physics.jpg" alt="JEE Physics" class="book-image">
+            <div class="book-info">
+                <h3 class="book-title">Complete Physics for JEE Main</h3>
+                <p class="book-author">by DC Pandey</p>
+                <div class="book-rating">★★★★★ <span class="rating-count">(3.2k reviews)</span></div>
+                <div class="book-price">₹699 <span class="original-price">₹999</span>
+                    <span class="discount-badge">30% OFF</span>
+                </div>
+                <div class="book-actions">
+                    <button class="action-btn buy-btn" title="Buy Now">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
+                        </svg>
+                    </button>
+                    <button class="action-btn cart-btn" title="Add to Cart">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add 4 more JEE books with similar structure -->
+        <div class="book-card" data-category="jee">
+            <img src="images/jee-chemistry.jpg" alt="JEE Chemistry" class="book-image">
+            <div class="book-info">
+                <h3 class="book-title">Modern Chemistry for JEE Advanced</h3>
+                <p class="book-author">by O.P. Tandon</p>
+                <div class="book-rating">★★★★☆ <span class="rating-count">(2.8k reviews)</span></div>
+                <div class="book-price">₹749 <span class="original-price">₹999</span>
+                    <span class="discount-badge">25% OFF</span>
+                </div>
+                <div class="book-actions">
+                    <button class="action-btn buy-btn" title="Buy Now">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
+                        </svg>
+                    </button>
+                    <button class="action-btn cart-btn" title="Add to Cart">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- GATE Section -->
+        <div class="book-card" data-category="gate">
+            <img src="images/gate-cse.jpg" alt="GATE CSE" class="book-image">
+            <div class="book-info">
+                <h3 class="book-title">GATE Computer Science Guide</h3>
+                <p class="book-author">by Made Easy Editorial Board</p>
+                <div class="book-rating">★★★★★ <span class="rating-count">(1.9k reviews)</span></div>
+                <div class="book-price">₹899 <span class="original-price">₹1299</span>
+                    <span class="discount-badge">31% OFF</span>
+                </div>
+                <div class="book-actions">
+                    <button class="action-btn buy-btn" title="Buy Now">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
+                        </svg>
+                    </button>
+                    <button class="action-btn cart-btn" title="Add to Cart">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add 4 more GATE books -->
+
+        <!-- ESE Section -->
+        <div class="book-card" data-category="ese">
+            <img src="images/ese-general-studies.jpg" alt="ESE General Studies" class="book-image">
+            <div class="book-info">
+                <h3 class="book-title">ESE General Studies & Engineering Aptitude</h3>
+                <p class="book-author">by IES Master Publications</p>
+                <div class="book-rating">★★★★☆ <span class="rating-count">(1.5k reviews)</span></div>
+                <div class="book-price">₹799 <span class="original-price">₹1199</span>
+                    <span class="discount-badge">33% OFF</span>
+                </div>
+                <div class="book-actions">
+                    <button class="action-btn buy-btn" title="Buy Now">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
+                        </svg>
+                    </button>
+                    <button class="action-btn cart-btn" title="Add to Cart">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add 4 more ESE books -->
+    </div>
+
+    <script>
+        // Function to handle URL parameters and auto-filter
+        function handleURLFilter() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const filterParam = urlParams.get('filter');
+            
+            if (filterParam) {
+                const filterButton = document.querySelector(`.filter-btn[data-category="${filterParam}"]`);
+                if (filterButton) {
+                    // Remove active class from all buttons
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    // Add active class to selected button
+                    filterButton.classList.add('active');
+                    
+                    // Filter the books
+                    bookCards.forEach(card => {
+                        if (card.dataset.category === filterParam) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                }
+            }
+        }
+
+        // Enhanced filter functionality
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const bookCards = document.querySelectorAll('.book-card');
+        
+        // Call handleURLFilter when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            handleURLFilter();
+            updateCartCount();
+            updateBuyNowIcons();
+        });
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                let category = button.getAttribute('data-category') || button.textContent.toLowerCase();
+                
+                if (category === 'all') {
+                    bookCards.forEach(card => {
+                        card.style.display = 'block';
+                    });
+                    return;
+                }
+                
+                bookCards.forEach(card => {
+                    const cardCategory = card.dataset.category;
+                    if (cardCategory === category) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Add to Cart Functionality
+        function addToCart(bookCard) {
+            const bookInfo = {
+                id: Date.now(),
+                title: bookCard.querySelector('.book-title').textContent,
+                author: bookCard.querySelector('.book-author').textContent,
+                price: bookCard.querySelector('.book-price').textContent.match(/₹(\d+)/)[1],
+                image: bookCard.querySelector('.book-image').src,
+                quantity: 1
+            };
+
+            // Get existing cart items
+            let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+            
+            // Add new item
+            cartItems.push(bookInfo);
+            
+            // Save to localStorage
+            localStorage.setItem('cartItems', JSON.stringify(cartItems));
+            
+            // Update cart count
+            updateCartCount();
+            
+            // Show toast notification
+            showToast('Success!', `${bookInfo.title} has been added to your cart`);
+        }
+
+        // Add this function to show toast notifications
+        function showToast(title, message) {
+            // Create toast container if it doesn't exist
+            let container = document.querySelector('.toast-container');
+            if (!container) {
+                container = document.createElement('div');
+                container.className = 'toast-container';
+                document.body.appendChild(container);
+            }
+
+            // Create toast element
+            const toast = document.createElement('div');
+            toast.className = 'toast success';
+            toast.innerHTML = `
+                <div class="toast-icon">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                            d="M5 13l4 4L19 7"/>
+                    </svg>
+                </div>
+                <div class="toast-content">
+                    <div class="toast-title">${title}</div>
+                    <div class="toast-message">${message}</div>
+                </div>
+            `;
+
+            // Add toast to container
+            container.appendChild(toast);
+
+            // Remove toast after 3 seconds
+            setTimeout(() => {
+                toast.style.animation = 'slideDownOut 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards';
+                setTimeout(() => {
+                    container.removeChild(toast);
+                    if (container.children.length === 0) {
+                        document.body.removeChild(container);
+                    }
+                }, 500);
+            }, 3000);
+        }
+
+        // Buy Now Functionality
+        function buyNow(bookCard) {
+            const bookInfo = {
+                id: Date.now(),
+                title: bookCard.querySelector('.book-title').textContent,
+                author: bookCard.querySelector('.book-author').textContent,
+                price: bookCard.querySelector('.book-price').textContent.match(/₹(\d+)/)[1],
+                image: bookCard.querySelector('.book-image').src,
+                quantity: 1
+            };
+
+            // Check if user is logged in
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            if (!isLoggedIn) {
+                alert('Please login to continue with purchase');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Clear existing cart and add this item
+            const buyNowItems = [bookInfo];
+            localStorage.setItem('cartItems', JSON.stringify(buyNowItems));
+            
+            // Redirect to checkout
+            window.location.href = 'checkout.html';
+        }
+
+        // Add click event listeners to all Add to Cart buttons
+        document.querySelectorAll('.cart-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const bookCard = this.closest('.book-card');
+                addToCart(bookCard);
+            });
+        });
+
+        // Add click event listeners to all Buy Now buttons
+        document.querySelectorAll('.buy-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const bookCard = this.closest('.book-card');
+                buyNow(bookCard);
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.querySelector('.search-container input');
+            const clearButton = document.querySelector('.clear-search');
+            const searchBtn = document.querySelector('.search-btn');
+
+            // Show/hide clear button based on input
+            searchInput.addEventListener('input', function() {
+                clearButton.style.display = this.value.length > 0 ? 'flex' : 'none';
+                searchBtn.style.color = this.value.length > 0 ? '#2563eb' : '#6b7280';
+            });
+
+            // Clear input when clear button is clicked
+            clearButton.addEventListener('click', function() {
+                searchInput.value = '';
+                this.style.display = 'none';
+                searchInput.focus();
+                searchBtn.style.color = '#6b7280';
+            });
+
+            // Handle search button click
+            searchBtn.addEventListener('click', handleSearch);
+
+            // Handle Enter key press
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    handleSearch();
+                }
+            });
+        });
+
+        function handleSearch() {
+            const searchInput = document.querySelector('.search-container input');
+            const searchCategory = document.querySelector('.search-container select');
+            
+            if (searchInput.value.trim() !== '') {
+                const searchQuery = encodeURIComponent(searchInput.value);
+                const category = encodeURIComponent(searchCategory.value);
+                window.location.href = `search-results.html?q=${searchQuery}&category=${category}`;
+            } else {
+                searchInput.focus();
+            }
+        }
+
+        // Update cart count
+        function updateCartCount() {
+            const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+            const count = cartItems.reduce((total, item) => total + (item.quantity || 1), 0);
+            const cartCount = document.getElementById('cartCount');
+            if (cartCount) {
+                cartCount.textContent = count;
+                cartCount.style.display = count > 0 ? 'flex' : 'none';
+            }
+        }
+
+        // Initialize cart count
+        document.addEventListener('DOMContentLoaded', updateCartCount);
+
+        // Function to update all Buy Now icons
+        function updateBuyNowIcons() {
+            const buyButtons = document.querySelectorAll('.buy-btn svg');
+            const newIconPath = `
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
+            `;
+            
+            buyButtons.forEach(svg => {
+                svg.innerHTML = newIconPath;
+            });
+        }
+
+        // Call the function when the document loads
+        document.addEventListener('DOMContentLoaded', updateBuyNowIcons);
+    </script>
+</body>
+</html> 

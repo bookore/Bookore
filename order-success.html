@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Success - Bookore</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --success: #10b981;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            background: 
+                radial-gradient(circle at top right, rgba(37, 99, 235, 0.1), transparent 400px),
+                radial-gradient(circle at bottom left, rgba(139, 92, 246, 0.1), transparent 400px),
+                linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .success-container {
+            background: white;
+            border-radius: 24px;
+            padding: 3rem;
+            width: 90%;
+            max-width: 800px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        .success-icon {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, var(--success), #059669);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+            color: white;
+            box-shadow: 0 0 0 15px rgba(16, 185, 129, 0.1);
+            animation: scaleIn 0.5s ease-out;
+        }
+
+        .success-icon svg {
+            width: 60px;
+            height: 60px;
+        }
+
+        .success-title {
+            font-size: 2.5rem;
+            color: #1f2937;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .order-number {
+            background: #f1f5f9;
+            padding: 0.75rem 1.5rem;
+            border-radius: 15px;
+            color: var(--primary);
+            font-weight: 600;
+            display: inline-block;
+            margin: 1rem 0;
+        }
+
+        .email-sent {
+            color: #64748b;
+            margin-bottom: 2.5rem;
+        }
+
+        .bill-container {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 2.5rem;
+            text-align: left;
+            margin: 2rem 0;
+        }
+
+        .bill-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .bill-title {
+            font-size: 1.5rem;
+            color: #1f2937;
+            font-weight: 600;
+        }
+
+        .bill-date {
+            color: #64748b;
+        }
+
+        .customer-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .detail-group h4 {
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+
+        .detail-group p {
+            color: #64748b;
+            margin: 0.25rem 0;
+        }
+
+        .bill-items {
+            margin-bottom: 2rem;
+        }
+
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .items-table th {
+            background: #f8fafc;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: #1f2937;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .items-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+            color: #4b5563;
+        }
+
+        .items-table tbody tr:last-child td {
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .items-table tfoot {
+            background: #f8fafc;
+        }
+
+        .items-table tfoot .summary-row td {
+            padding: 0.75rem 1rem;
+            color: #1f2937;
+        }
+
+        .items-table tfoot .summary-row.total td {
+            font-weight: 600;
+            color: #2563eb;
+            border-top: 2px solid #e5e7eb;
+            background: white;
+        }
+
+        .items-table tfoot td:last-child {
+            text-align: right;
+            font-weight: 600;
+        }
+
+        .bill-summary {
+            margin-left: auto;
+            width: 300px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            color: #64748b;
+        }
+
+        .summary-row.total {
+            font-weight: 600;
+            color: #1f2937;
+            border-top: 2px solid #e5e7eb;
+            margin-top: 0.5rem;
+            padding-top: 0.5rem;
+        }
+
+        .actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .button {
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .primary {
+            background: var(--primary);
+            color: white;
+            border: none;
+        }
+
+        .primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.2);
+        }
+
+        .secondary {
+            background: white;
+            color: var(--primary);
+            border: 2px solid #e5e7eb;
+        }
+
+        .secondary:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .success-container {
+                padding: 2rem;
+            }
+
+            .customer-details {
+                grid-template-columns: 1fr;
+            }
+
+            .bill-summary {
+                width: 100%;
+            }
+
+            .actions {
+                flex-direction: column;
+            }
+
+            .button {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        .animate-spin {
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .order-summary-section {
+            border-top: 1px solid #e5e7eb;
+            padding-top: 1.5rem;
+            max-width: 400px;
+            margin-left: auto;
+        }
+
+        .summary-line {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            color: #374151;
+        }
+
+        .summary-line.savings {
+            color: #059669;
+            font-weight: 500;
+        }
+
+        .summary-line.total {
+            border-top: 2px solid #e5e7eb;
+            margin-top: 0.5rem;
+            padding-top: 1rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #2563eb;
+        }
+
+        .shipping-info {
+            text-align: right;
+        }
+
+        .free-tag {
+            background: #ecfdf5;
+            color: #059669;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-weight: 600;
+            border: 1px dashed #34d399;
+            display: inline-block;
+        }
+
+        .saved-text {
+            display: block;
+            font-size: 0.875rem;
+            color: #059669;
+            margin-top: 0.25rem;
+        }
+
+        .savings-amount {
+            color: #059669;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="success-container">
+        <div class="success-icon">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+            </svg>
+        </div>
+        <h1 class="success-title">Order Placed Successfully!</h1>
+        <div class="order-number" id="displayOrderId"></div>
+        <p class="email-sent">A confirmation email has been sent to <strong id="customerEmail"></strong></p>
+
+        <div class="bill-container">
+            <div class="bill-header">
+                <div class="bill-title">Order Summary</div>
+                <div class="bill-date" id="billDate"></div>
+            </div>
+
+            <div class="customer-details">
+                <div class="detail-group">
+                    <h4>Shipping To</h4>
+                    <p id="customerName"></p>
+                    <p id="customerAddress"></p>
+                </div>
+                <div class="detail-group">
+                    <h4>Payment Method</h4>
+                    <p id="paymentMethod"></p>
+                </div>
+            </div>
+
+            <div class="bill-items">
+                <!-- Items list table -->
+                <table class="items-table" style="margin-bottom: 2rem;">
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="billItems"></tbody>
+                </table>
+
+                <!-- Order Summary Section -->
+                <div class="order-summary-section">
+                    <div class="summary-line">
+                        <span>Subtotal</span>
+                        <span id="subtotal">₹0.00</span>
+                    </div>
+                    <div class="summary-line">
+                        <span>Shipping</span>
+                        <div class="shipping-info" id="shipping">
+                            <span class="free-tag">FREE</span>
+                            <span class="saved-text">Saved ₹40.00</span>
+                        </div>
+                    </div>
+                    <div class="summary-line savings">
+                        <span>Total Savings</span>
+                        <span id="savings" class="savings-amount">₹0.00</span>
+                    </div>
+                    <div class="summary-line total">
+                        <span>Total</span>
+                        <span id="total">₹0.00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="actions">
+            <button class="button primary" onclick="downloadInvoice()">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                        d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+                Download Invoice
+            </button>
+            <a href="index.html" class="button secondary">
+                Continue Shopping
+            </a>
+        </div>
+    </div>
+
+    <script src="invoice.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get current order ID
+            const orderId = localStorage.getItem('currentOrderId');
+            
+            if (orderId) {
+                const orders = JSON.parse(localStorage.getItem('userOrders')) || [];
+                const order = orders.find(o => o.orderId === orderId);
+                
+                if (order) {
+                    // Update order details
+                    document.getElementById('displayOrderId').textContent = order.orderId;
+                    document.getElementById('billDate').textContent = new Date(order.orderDate).toLocaleDateString();
+                    document.getElementById('customerName').textContent = order.customer.name;
+                    document.getElementById('customerEmail').textContent = order.customer.email;
+                    document.getElementById('customerAddress').textContent = order.customer.address;
+                    document.getElementById('paymentMethod').textContent = order.payment.method;
+
+                    // Update items table
+                    const itemsHtml = order.items.map(item => `
+                        <tr>
+                            <td>
+                                <div class="item-info">
+                                    <img src="${item.image}" alt="${item.title}" class="item-image" style="width: 50px; height: 70px; object-fit: cover; border-radius: 4px;">
+                                    <span>${item.title}</span>
+                                </div>
+                            </td>
+                            <td>${item.quantity}</td>
+                            <td>₹${item.price.toFixed(2)}</td>
+                            <td>₹${item.total.toFixed(2)}</td>
+                        </tr>
+                    `).join('');
+                    document.getElementById('billItems').innerHTML = itemsHtml;
+
+                    // Update totals
+                    document.getElementById('subtotal').textContent = `₹${order.payment.subtotal.toFixed(2)}`;
+                    
+                    if (order.payment.shipping === 0) {
+                        document.getElementById('shipping').innerHTML = `
+                            <span class="free-tag">FREE</span>
+                            <span class="saved-text">Saved ₹40.00</span>
+                        `;
+                    } else {
+                        document.getElementById('shipping').textContent = `₹${order.payment.shipping.toFixed(2)}`;
+                    }
+                    
+                    document.getElementById('savings').textContent = `₹${order.payment.savings.toFixed(2)}`;
+                    document.getElementById('total').textContent = `₹${order.payment.total.toFixed(2)}`;
+                }
+            }
+        });
+
+        async function downloadInvoice() {
+            try {
+                // Show loading state
+                const button = document.querySelector('.primary');
+                const originalText = button.innerHTML;
+                button.disabled = true;
+                button.innerHTML = 'Generating PDF...';
+
+                // Get order data
+                const orderId = localStorage.getItem('currentOrderId');
+                const orders = JSON.parse(localStorage.getItem('userOrders')) || [];
+                const order = orders.find(o => o.orderId === orderId);
+
+                if (!order) {
+                    throw new Error('Order not found');
+                }
+
+                // Create PDF content
+                const element = document.createElement('div');
+                element.style.padding = '40px';
+                element.style.background = 'white';
+                element.innerHTML = `
+                    <div style="text-align: center; margin-bottom: 30px;">
+                        <h1 style="color: #2563eb; margin: 0; font-size: 28px;">BOOKORE</h1>
+                        <p style="color: #64748b; margin: 5px 0;">Your Online Bookstore</p>
+                        <h2 style="color: #1f2937; margin: 20px 0;">INVOICE</h2>
+                        <p style="color: #64748b;">Order #${order.orderId}</p>
+                        <p style="color: #64748b;">Date: ${new Date(order.orderDate).toLocaleDateString()}</p>
+                    </div>
+
+                    <div style="margin-bottom: 30px;">
+                        <div style="float: left;">
+                            <h3 style="color: #1f2937; margin: 0;">Customer Details:</h3>
+                            <p style="color: #64748b; margin: 5px 0;">${order.customer.name}</p>
+                            <p style="color: #64748b; margin: 5px 0;">${order.customer.email}</p>
+                            <p style="color: #64748b; margin: 5px 0;">${order.customer.address}</p>
+                        </div>
+                        <div style="float: right; text-align: right;">
+                            <h3 style="color: #1f2937; margin: 0;">Payment Method:</h3>
+                            <p style="color: #64748b; margin: 5px 0;">${order.payment.method}</p>
+                        </div>
+                        <div style="clear: both;"></div>
+                    </div>
+
+                    <table style="width: 100%; border-collapse: collapse; margin: 30px 0;">
+                        <thead>
+                            <tr style="background: #f8fafc;">
+                                <th style="padding: 12px; text-align: left; border-bottom: 2px solid #e5e7eb;">Item</th>
+                                <th style="padding: 12px; text-align: center; border-bottom: 2px solid #e5e7eb;">Quantity</th>
+                                <th style="padding: 12px; text-align: right; border-bottom: 2px solid #e5e7eb;">Price</th>
+                                <th style="padding: 12px; text-align: right; border-bottom: 2px solid #e5e7eb;">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${order.items.map(item => `
+                                <tr>
+                                    <td style="padding: 12px; border-bottom: 1px solid #e5e7eb;">${item.title}</td>
+                                    <td style="padding: 12px; text-align: center; border-bottom: 1px solid #e5e7eb;">${item.quantity}</td>
+                                    <td style="padding: 12px; text-align: right; border-bottom: 1px solid #e5e7eb;">₹${item.price.toFixed(2)}</td>
+                                    <td style="padding: 12px; text-align: right; border-bottom: 1px solid #e5e7eb;">₹${item.total.toFixed(2)}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+
+                    <div style="margin-left: auto; width: 300px;">
+                        <div style="display: flex; justify-content: space-between; padding: 8px 0;">
+                            <span style="color: #64748b;">Subtotal:</span>
+                            <span>₹${order.payment.subtotal.toFixed(2)}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding: 8px 0;">
+                            <span style="color: #64748b;">Shipping:</span>
+                            <span style="color: #059669;">${order.payment.shipping === 0 ? 'FREE' : `₹${order.payment.shipping.toFixed(2)}`}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding: 8px 0;">
+                            <span style="color: #059669;">Total Savings:</span>
+                            <span style="color: #059669;">₹${order.payment.savings.toFixed(2)}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding: 12px 0; border-top: 2px solid #e5e7eb; margin-top: 8px;">
+                            <span style="font-weight: bold;">Total:</span>
+                            <span style="color: #2563eb; font-weight: bold;">₹${order.payment.total.toFixed(2)}</span>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
+                        <p style="color: #2563eb; margin: 0;">Thank you for shopping with Bookore!</p>
+                        <p style="color: #64748b; margin: 10px 0;">For any queries, please contact support@bookore.com</p>
+                    </div>
+                `;
+
+                // Configure PDF options
+                const opt = {
+                    margin: 10,
+                    filename: `bookore-invoice-${order.orderId}.pdf`,
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2 },
+                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                };
+
+                // Generate PDF
+                await html2pdf().set(opt).from(element).save();
+
+            } catch (error) {
+                console.error('PDF generation failed:', error);
+                alert('Failed to generate invoice. Please try again.');
+            } finally {
+                // Reset button state
+                const button = document.querySelector('.primary');
+                button.disabled = false;
+                button.innerHTML = originalText;
+            }
+        }
+    </script>
+</body>
+</html> 

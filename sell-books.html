@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <!-- Add these favicon links right after the <head> tag -->
+        <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+        <link rel="manifest" href="favicon/site.webmanifest">
+        <link rel="mask-icon" href="favicon/safari-pinned-tab.svg" color="#5bbad5">
+        <link rel="shortcut icon" href="favicon/favicon.ico">
+        <meta name="msapplication-TileColor" content="#2b5797">
+        <meta name="theme-color" content="#ffffff">
+
+
+        
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sell Used Books - Book Store</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(45deg, #f3f4f6 0%, #fff 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated background elements */
+        .bg-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        .shape {
+            position: absolute;
+            background: linear-gradient(45deg, #2563eb22, #3b82f622);
+            border-radius: 50%;
+            animation: float 20s infinite;
+        }
+
+        .shape:nth-child(1) {
+            width: 400px;
+            height: 400px;
+            top: -200px;
+            left: -200px;
+        }
+
+        .shape:nth-child(2) {
+            width: 300px;
+            height: 300px;
+            bottom: -150px;
+            right: -150px;
+            animation-delay: -7s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(50px, 50px) rotate(90deg); }
+            50% { transform: translate(100px, 0) rotate(180deg); }
+            75% { transform: translate(50px, -50px) rotate(270deg); }
+        }
+
+        .sell-books-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            animation: fadeIn 0.5s ease-out;
+            transform: none !important;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .sell-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+            padding: 3rem;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .sell-header h1 {
+            font-size: 2.5rem;
+            color: #1f2937;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientText 3s ease infinite;
+        }
+
+        @keyframes gradientText {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .sell-header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+        }
+
+        .sell-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .step-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: visible;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .step-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+        .step-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #2563eb, #3b82f6);
+        }
+
+        .step-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: -1rem auto 1.5rem;
+            font-size: 1.8rem;
+            font-weight: 600;
+            box-shadow: 0 8px 20px rgba(37,99,235,0.3);
+            transform: translateY(0);
+            transition: all 0.5s ease;
+        }
+
+        .step-card:hover .step-icon {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(37,99,235,0.4);
+        }
+
+        .step-card.completed .step-icon {
+            background: linear-gradient(135deg, #059669, #10b981);
+            box-shadow: 0 8px 20px rgba(5, 150, 105, 0.3);
+        }
+
+        .step-card.completed::before {
+            background: linear-gradient(90deg, #059669, #10b981);
+        }
+
+        .step-card.completed::after {
+            content: '✓';
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 30px;
+            height: 30px;
+            background: #10b981;
+            border-radius: 50%;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.2);
+            animation: scaleIn 0.3s ease;
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0); }
+            to { transform: scale(1); }
+        }
+
+        .step-card h3 {
+            color: #1f2937;
+            margin-bottom: 0.8rem;
+        }
+
+        .step-card p {
+            color: #6b7280;
+            font-size: 0.95rem;
+        }
+
+        .sell-form {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            position: relative;
+            overflow: hidden;
+            transform: none !important;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #374151;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(5px);
+            border: 2px solid rgba(59,130,246,0.1);
+            padding: 1rem;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59,130,246,0.1);
+            transform: translateY(-2px);
+        }
+
+        .book-condition {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .condition-option {
+            flex: 1;
+            position: relative;
+        }
+
+        .condition-option input {
+            display: none;
+        }
+
+        .condition-option label {
+            display: block;
+            padding: 1.2rem;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(5px);
+            border: 2px solid rgba(59,130,246,0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .condition-option input:checked + label {
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37,99,235,0.2);
+        }
+
+        .image-upload {
+            border: 3px dashed rgba(59,130,246,0.3);
+            padding: 3rem;
+            text-align: center;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(5px);
+        }
+
+        .image-upload:hover {
+            border-color: #3b82f6;
+            background: linear-gradient(135deg, #f8fafc, #ffffff);
+            transform: translateY(-2px);
+        }
+
+        .image-upload p:first-child {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #2563eb;
+            margin-bottom: 0.5rem;
+        }
+
+        .submit-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: white;
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        }
+
+        .submit-btn .animate-spin {
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+        }
+
+        .submit-btn.success {
+            background: linear-gradient(135deg, #059669, #10b981);
+        }
+
+        .submit-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .submit-btn.loading {
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+
+        .upload-preview {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .preview-image {
+            position: relative;
+            aspect-ratio: 1;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .preview-image:hover {
+            transform: scale(1.05);
+        }
+
+        .preview-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .remove-image {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(0,0,0,0.5);
+            color: white;
+            border: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        #price:disabled {
+            background: #f3f4f6;
+            cursor: not-allowed;
+        }
+
+        #price.enabled {
+            background: rgba(255, 255, 255, 0.9);
+            cursor: text;
+        }
+
+        .photo-requirement {
+            margin-bottom: 1rem;
+            background: rgba(59,130,246,0.1);
+            padding: 1rem;
+            border-radius: 8px;
+        }
+
+        .required-text {
+            display: block;
+            font-weight: 500;
+            color: #2563eb;
+            margin-bottom: 0.5rem;
+        }
+
+        .photo-types {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .photo-type {
+            background: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: #4b5563;
+            border: 1px solid rgba(59,130,246,0.2);
+        }
+
+        .photo-error {
+            color: #dc2626;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            min-height: 20px;
+        }
+
+        .upload-preview {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .preview-image {
+            aspect-ratio: 1;
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid #e5e7eb;
+            transition: all 0.3s ease;
+        }
+
+        .preview-image.filled {
+            border-color: #10b981;
+        }
+
+        .preview-image.empty {
+            background: #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #9ca3af;
+            font-size: 0.9rem;
+        }
+
+        #category {
+            max-height: 300px;
+        }
+
+        #category optgroup {
+            font-weight: 600;
+            color: #2563eb;
+            background: rgba(59,130,246,0.05);
+        }
+
+        #category option {
+            padding: 8px;
+            color: #4b5563;
+            font-weight: normal;
+        }
+
+        #category option:hover {
+            background-color: rgba(59,130,246,0.1);
+        }
+
+        #category optgroup option {
+            padding-left: 20px;
+        }
+
+        /* Update Success Modal Styles */
+        .success-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .success-modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .success-content {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 24px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            transform: translateY(20px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: linear-gradient(145deg, #ffffff, #f8fafc);
+        }
+
+        .success-modal.show .success-content {
+            transform: translateY(0);
+        }
+
+        .success-icon {
+            width: 100px;
+            height: 100px;
+            background: conic-gradient(from 180deg at 50% 50%,
+                #059669 0deg,
+                #10b981 180deg,
+                #34d399 360deg);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            animation: successIconAnimation 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            box-shadow: 0 0 0 10px rgba(16, 185, 129, 0.1);
+        }
+
+        .success-icon::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: inherit;
+            filter: blur(20px);
+            opacity: 0.4;
+            z-index: -1;
+        }
+
+        .success-icon svg {
+            width: 50px;
+            height: 50px;
+            color: white;
+            animation: checkmarkAnimation 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            stroke-dasharray: 100;
+            stroke-dashoffset: 100;
+        }
+
+        .success-title {
+            font-size: 2rem;
+            color: #1f2937;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #1f2937, #4b5563);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
+            animation-delay: 0.2s;
+        }
+
+        .success-message {
+            color: #6b7280;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            font-size: 1.1rem;
+            animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
+            animation-delay: 0.3s;
+        }
+
+        .success-btn {
+            background: linear-gradient(135deg, #059669, #10b981, #34d399);
+            background-size: 200% auto;
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 12px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 1.1rem;
+            animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
+            animation-delay: 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .success-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(5, 150, 105, 0.3);
+            background-position: right center;
+        }
+
+        @keyframes successIconAnimation {
+            0% { transform: scale(0.5); opacity: 0; }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes checkmarkAnimation {
+            from { stroke-dashoffset: 100; }
+            to { stroke-dashoffset: 0; }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Add to your existing styles */
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 1rem;
+            border-radius: 8px;
+            background: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+            display: flex;
+            align-items: center;
+            min-width: 300px;
+        }
+
+        .notification.success {
+            border-left: 4px solid #10b981;
+        }
+
+        .notification.error {
+            border-left: 4px solid #ef4444;
+        }
+
+        .notification-content {
+            display: flex;
+            align-items: center;
+            color: #1f2937;
+        }
+
+        .notification.success svg {
+            color: #10b981;
+        }
+
+        .notification.error svg {
+            color: #ef4444;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .fade-out {
+            animation: fadeOut 0.3s ease forwards;
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; transform: translateX(0); }
+            to { opacity: 0; transform: translateX(100%); }
+        }
+
+        .submit-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .animate-spin {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .submit-btn.success {
+            background: linear-gradient(45deg, #059669, #10b981);
+            transform: translateY(-2px);
+        }
+
+        .form-submit {
+            margin-top: 2rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="sell-books-container">
+        <div class="sell-header">
+            <h1>Sell Your Used Books</h1>
+            <p>Turn your old books into cash! Follow these simple steps to list your books for sale.</p>
+        </div>
+
+        <div class="sell-steps">
+            <div class="step-card">
+                <div class="step-icon">1</div>
+                <h3>Enter Details</h3>
+                <p>Fill in your book's information including title, author, and condition</p>
+            </div>
+            <div class="step-card">
+                <div class="step-icon">2</div>
+                <h3>Upload Photos</h3>
+                <p>Add clear photos of your book from different angles</p>
+            </div>
+            <div class="step-card">
+                <div class="step-icon">3</div>
+                <h3>Set Price</h3>
+                <p>Set your selling price and wait for buyers</p>
+            </div>
+        </div>
+
+        <form class="sell-form" id="sellBookForm">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="bookTitle">Book Title*</label>
+                    <input type="text" id="bookTitle" required placeholder="Enter book title">
+                </div>
+                <div class="form-group">
+                    <label for="author">Author*</label>
+                    <input type="text" id="author" required placeholder="Enter author name">
+                </div>
+                <div class="form-group">
+                    <label for="isbn">ISBN (Optional)</label>
+                    <input type="text" id="isbn" placeholder="Enter ISBN">
+                </div>
+                <div class="form-group">
+                    <label for="category">Category*</label>
+                    <select id="category" required>
+                        <option value="">Select category</option>
+                        <optgroup label="Fiction">
+                            <option value="fiction-literary">Literary Fiction</option>
+                            <option value="fiction-mystery">Mystery & Thriller</option>
+                            <option value="fiction-scifi">Science Fiction</option>
+                            <option value="fiction-fantasy">Fantasy</option>
+                            <option value="fiction-romance">Romance</option>
+                            <option value="fiction-horror">Horror</option>
+                            <option value="fiction-historical">Historical Fiction</option>
+                            <option value="fiction-contemporary">Contemporary Fiction</option>
+                        </optgroup>
+                        <optgroup label="Non-Fiction">
+                            <option value="nonfiction-biography">Biography & Memoir</option>
+                            <option value="nonfiction-history">History</option>
+                            <option value="nonfiction-business">Business & Economics</option>
+                            <option value="nonfiction-selfhelp">Self-Help & Personal Development</option>
+                            <option value="nonfiction-philosophy">Philosophy</option>
+                            <option value="nonfiction-science">Science & Technology</option>
+                            <option value="nonfiction-politics">Politics & Current Affairs</option>
+                            <option value="nonfiction-psychology">Psychology</option>
+                            <option value="nonfiction-cooking">Cooking & Food</option>
+                            <option value="nonfiction-art">Art & Photography</option>
+                        </optgroup>
+                        <optgroup label="Academic & Educational">
+                            <option value="academic-engineering">Engineering</option>
+                            <option value="academic-medical">Medical & Healthcare</option>
+                            <option value="academic-law">Law</option>
+                            <option value="academic-computer">Computer Science & IT</option>
+                            <option value="academic-mathematics">Mathematics</option>
+                            <option value="academic-physics">Physics</option>
+                            <option value="academic-chemistry">Chemistry</option>
+                            <option value="academic-biology">Biology</option>
+                            <option value="academic-management">Management Studies</option>
+                        </optgroup>
+                        <optgroup label="Exam Preparation">
+                            <option value="exam-jee">JEE (Main & Advanced)</option>
+                            <option value="exam-neet">NEET</option>
+                            <option value="exam-gate">GATE</option>
+                            <option value="exam-cat">CAT/MBA Entrance</option>
+                            <option value="exam-upsc">UPSC/Civil Services</option>
+                            <option value="exam-banking">Banking & SSC</option>
+                        </optgroup>
+                        <optgroup label="Children's Books">
+                            <option value="children-picture">Picture Books (0-5 years)</option>
+                            <option value="children-early">Early Readers (6-8 years)</option>
+                            <option value="children-middle">Middle Grade (9-12 years)</option>
+                            <option value="children-young">Young Adult (13+ years)</option>
+                            <option value="children-educational">Educational & Activity Books</option>
+                        </optgroup>
+                        <optgroup label="Languages">
+                            <option value="lang-hindi">Hindi</option>
+                            <option value="lang-marathi">Marathi</option>
+                            <option value="lang-bengali">Bengali</option>
+                            <option value="lang-tamil">Tamil</option>
+                            <option value="lang-telugu">Telugu</option>
+                            <option value="lang-kannada">Kannada</option>
+                            <option value="lang-malayalam">Malayalam</option>
+                            <option value="lang-gujarati">Gujarati</option>
+                        </optgroup>
+                        <optgroup label="Other Categories">
+                            <option value="other-comics">Comics & Graphic Novels</option>
+                            <option value="other-religion">Religion & Spirituality</option>
+                            <option value="other-sports">Sports & Fitness</option>
+                            <option value="other-travel">Travel</option>
+                            <option value="other-magazines">Magazines & Periodicals</option>
+                        </optgroup>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Book Condition*</label>
+                <div class="book-condition">
+                    <div class="condition-option">
+                        <input type="radio" name="condition" id="like-new" value="like-new" required>
+                        <label for="like-new">Like New</label>
+                    </div>
+                    <div class="condition-option">
+                        <input type="radio" name="condition" id="very-good" value="very-good">
+                        <label for="very-good">Very Good</label>
+                    </div>
+                    <div class="condition-option">
+                        <input type="radio" name="condition" id="good" value="good">
+                        <label for="good">Good</label>
+                    </div>
+                    <div class="condition-option">
+                        <input type="radio" name="condition" id="acceptable" value="acceptable">
+                        <label for="acceptable">Acceptable</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description*</label>
+                <textarea id="description" rows="4" required placeholder="Describe your book's condition, any marks or damages, etc."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Upload Photos*</label>
+                <div class="photo-requirement">
+                    <span class="required-text">All 5 photos are required:</span>
+                    <div class="photo-types">
+                        <span class="photo-type">Front Cover</span>
+                        <span class="photo-type">Back Cover</span>
+                        <span class="photo-type">Side</span>
+                        <span class="photo-type">Inside Pages</span>
+                        <span class="photo-type">Book Condition</span>
+                    </div>
+                </div>
+                <div class="image-upload" id="imageUpload">
+                    <input type="file" id="bookImages" multiple accept="image/*" style="display: none;">
+                    <p>Click or drag to upload all 5 required photos</p>
+                    <p style="color: #6b7280; font-size: 0.9rem;">
+                        <span id="photoCount">0</span>/5 photos uploaded
+                    </p>
+                </div>
+                <div class="upload-preview" id="imagePreview"></div>
+                <div class="photo-error" id="photoError"></div>
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="originalPrice">Original Price (₹)*</label>
+                    <input type="number" id="originalPrice" required min="1" placeholder="Enter original price" 
+                        oninput="calculateSuggestedPrice()">
+                </div>
+                <div class="form-group">
+                    <label for="price">Your Selling Price (₹)*</label>
+                    <input type="number" id="price" required min="1" placeholder="Price will be set automatically" disabled>
+                </div>
+            </div>
+
+            <div class="form-submit">
+                <button type="button" class="submit-btn" onclick="sendForVerification()">
+                    Send for Verification
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="success-modal" id="successModal">
+        <div class="success-content">
+            <div class="success-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                </svg>
+            </div>
+            <h2 class="success-title">Verification in Progress!</h2>
+            <p class="success-message">
+              Your Book Summision is under review and will be verifeed within 24 hours. You'll receive an email once approved.
+            </p>
+            <button class="success-btn" onclick="closeSuccessModal()">Awesome, thanks!</button>
+        </div>
+    </div>
+
+    <script>
+        const REQUIRED_PHOTOS = 5;
+        const PHOTO_TYPES = ['Front Cover', 'Back Cover', 'Side', 'Inside Pages', 'Book Condition'];
+
+        // Image upload preview
+        const imageUpload = document.getElementById('imageUpload');
+        const fileInput = document.getElementById('bookImages');
+        const imagePreview = document.getElementById('imagePreview');
+        let uploadedFiles = [];
+
+        imageUpload.addEventListener('click', () => fileInput.click());
+
+        imageUpload.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            imageUpload.style.borderColor = '#3b82f6';
+            imageUpload.style.background = '#f8fafc';
+        });
+
+        imageUpload.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            imageUpload.style.borderColor = '#e5e7eb';
+            imageUpload.style.background = 'white';
+        });
+
+        imageUpload.addEventListener('drop', (e) => {
+            e.preventDefault();
+            imageUpload.style.borderColor = '#e5e7eb';
+            imageUpload.style.background = 'white';
+            
+            const files = e.dataTransfer.files;
+            handleFiles(files);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+
+        function handleFiles(files) {
+            const totalFiles = uploadedFiles.length + files.length;
+            if (totalFiles > REQUIRED_PHOTOS) {
+                alert('Maximum 5 images allowed');
+                return;
+            }
+            
+            if (totalFiles < REQUIRED_PHOTOS) {
+                document.getElementById('photoError').textContent = 
+                    `Please upload all ${REQUIRED_PHOTOS} required photos`;
+            } else {
+                document.getElementById('photoError').textContent = '';
+            }
+
+            Array.from(files).forEach(file => {
+                if (!file.type.startsWith('image/')) return;
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const div = document.createElement('div');
+                    div.className = 'preview-image filled';
+                    div.innerHTML = `
+                        <img src="${e.target.result}" alt="Preview">
+                        <button type="button" class="remove-image">&times;</button>
+                        <span class="photo-label">${PHOTO_TYPES[uploadedFiles.length]}</span>
+                    `;
+                    imagePreview.appendChild(div);
+
+                    div.querySelector('.remove-image').addEventListener('click', () => {
+                        div.remove();
+                        uploadedFiles = uploadedFiles.filter(f => f !== file);
+                        updatePhotoCount();
+                        updateEmptySlots();
+                    });
+                };
+                reader.readAsDataURL(file);
+                uploadedFiles.push(file);
+                updatePhotoCount();
+            });
+            updateEmptySlots();
+        }
+
+        function updatePhotoCount() {
+            document.getElementById('photoCount').textContent = uploadedFiles.length;
+        }
+
+        function updateEmptySlots() {
+            // Clear existing preview
+            imagePreview.innerHTML = '';
+            
+            // Add filled slots
+            uploadedFiles.forEach((file, index) => {
+                const div = document.createElement('div');
+                div.className = 'preview-image filled';
+                div.innerHTML = `
+                    <img src="${URL.createObjectURL(file)}" alt="Preview">
+                    <button type="button" class="remove-image">&times;</button>
+                    <span class="photo-label">${PHOTO_TYPES[index]}</span>
+                `;
+                imagePreview.appendChild(div);
+
+                div.querySelector('.remove-image').addEventListener('click', () => {
+                    uploadedFiles = uploadedFiles.filter(f => f !== file);
+                    updatePhotoCount();
+                    updateEmptySlots();
+                });
+            });
+
+            // Add empty slots
+            for (let i = uploadedFiles.length; i < REQUIRED_PHOTOS; i++) {
+                const div = document.createElement('div');
+                div.className = 'preview-image empty';
+                div.innerHTML = `<span>${PHOTO_TYPES[i]}</span>`;
+                imagePreview.appendChild(div);
+            }
+        }
+
+        // Form submission
+        document.getElementById('sellBookForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (uploadedFiles.length !== REQUIRED_PHOTOS) {
+                alert(`Please upload all ${REQUIRED_PHOTOS} required photos`);
+                return;
+            }
+
+            // Get the book data
+            const bookData = {
+                title: document.getElementById('bookTitle').value,
+                author: document.getElementById('author').value,
+                category: document.getElementById('category').value,
+                condition: document.querySelector('input[name="condition"]:checked').value,
+                price: document.getElementById('price').value,
+                originalPrice: document.getElementById('originalPrice').value,
+                images: uploadedFiles.map(file => URL.createObjectURL(file)),
+                status: 'pending',
+                listDate: new Date().toISOString()
+            };
+
+            // Get existing books or initialize empty array
+            const userBooks = JSON.parse(localStorage.getItem('userBooks')) || [];
+            
+            // Add new book
+            userBooks.push(bookData);
+            
+            // Update user's books count
+            const userData = JSON.parse(localStorage.getItem('userData'));
+            userData.booksListed = userBooks.length;
+            
+            // Save to localStorage
+            localStorage.setItem('userBooks', JSON.stringify(userBooks));
+            localStorage.setItem('userData', JSON.stringify(userData));
+
+            // Show success modal
+            showSuccessModal();
+            
+            // Reset form after delay
+            setTimeout(() => {
+                this.reset();
+                imagePreview.innerHTML = '';
+                uploadedFiles = [];
+                updateEmptySlots();
+                // Redirect to profile page after successful submission
+                window.location.href = 'profile.html';
+            }, 2000);
+        });
+
+        function showSuccessModal() {
+            const modal = document.getElementById('successModal');
+            modal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeSuccessModal() {
+            const modal = document.getElementById('successModal');
+            modal.classList.remove('show');
+            document.body.style.overflow = '';
+        }
+
+        // Add this after your existing script
+        const form = document.getElementById('sellBookForm');
+        const stepCards = document.querySelectorAll('.step-card');
+        
+        // Function to check if a section is complete
+        function checkSectionCompletion() {
+            // Check first section (Book Details)
+            const title = document.getElementById('bookTitle').value;
+            const author = document.getElementById('author').value;
+            const category = document.getElementById('category').value;
+            const condition = document.querySelector('input[name="condition"]:checked');
+            
+            if (title && author && category && condition) {
+                stepCards[0].classList.add('completed');
+            } else {
+                stepCards[0].classList.remove('completed');
+            }
+            
+            // Check second section (Photos)
+            if (uploadedFiles.length > 0) {
+                stepCards[1].classList.add('completed');
+            } else {
+                stepCards[1].classList.remove('completed');
+            }
+            
+            // Check third section (Price)
+            const price = document.getElementById('price').value;
+            const originalPrice = document.getElementById('originalPrice').value;
+            
+            if (price && originalPrice) {
+                stepCards[2].classList.add('completed');
+            } else {
+                stepCards[2].classList.remove('completed');
+            }
+        }
+        
+        // Add event listeners to all form inputs
+        form.querySelectorAll('input, select, textarea').forEach(input => {
+            input.addEventListener('input', checkSectionCompletion);
+        });
+
+        function calculateSuggestedPrice() {
+            const originalPrice = document.getElementById('originalPrice');
+            const priceInput = document.getElementById('price');
+            const condition = document.querySelector('input[name="condition"]:checked');
+            
+            if (originalPrice.value && parseInt(originalPrice.value) > 0) {
+                // Enable the price input
+                priceInput.removeAttribute('disabled');
+                priceInput.classList.add('enabled');
+                
+                // Calculate price based on condition
+                let pricePercentage = 0.3; // Default for "Acceptable"
+                
+                if (condition) {
+                    switch(condition.value) {
+                        case 'like-new':
+                            pricePercentage = 0.5; // 50% for Like New
+                            break;
+                        case 'very-good':
+                            pricePercentage = 0.4; // 40% for Very Good
+                            break;
+                        case 'good':
+                            pricePercentage = 0.3; // 30% for Good
+                            break;
+                        case 'acceptable':
+                            pricePercentage = 0.2; // 20% for Acceptable
+                            break;
+                    }
+                }
+                
+                const calculatedPrice = Math.round(parseInt(originalPrice.value) * pricePercentage);
+                priceInput.value = calculatedPrice;
+                
+                // Set min and max values for selling price
+                priceInput.min = Math.round(parseInt(originalPrice.value) * 0.2);
+                priceInput.max = parseInt(originalPrice.value);
+            } else {
+                // Disable and reset price input
+                priceInput.setAttribute('disabled', 'disabled');
+                priceInput.classList.remove('enabled');
+                priceInput.value = '';
+            }
+        }
+
+        // Add event listeners to condition radio buttons
+        document.querySelectorAll('input[name="condition"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                if (document.getElementById('originalPrice').value) {
+                    calculateSuggestedPrice();
+                }
+            });
+        });
+
+        // Add validation for price input
+        document.getElementById('price').addEventListener('input', function() {
+            const originalPrice = parseInt(document.getElementById('originalPrice').value);
+            const currentPrice = parseInt(this.value);
+            
+            if (currentPrice > originalPrice) {
+                this.value = originalPrice;
+            } else if (currentPrice < this.min) {
+                this.value = this.min;
+            }
+        });
+
+        // Update the sendForVerification function
+        function sendForVerification() {
+            // Get all the input values
+            const bookTitle = document.getElementById('bookTitle').value.trim();
+            const author = document.getElementById('author').value.trim();
+            const category = document.getElementById('category').value;
+            const condition = document.querySelector('input[name="condition"]:checked')?.value;
+            const price = document.getElementById('price').value;
+            const originalPrice = document.getElementById('originalPrice').value;
+
+            // Validate inputs
+            if (!bookTitle || !author || !category || !condition || !price || !originalPrice) {
+                showNotification('Please fill in all required fields', 'error');
+                return;
+            }
+
+            // Validate images
+            if (uploadedFiles.length !== REQUIRED_PHOTOS) {
+                showNotification(`Please upload all ${REQUIRED_PHOTOS} required photos`, 'error');
+                return;
+            }
+
+            // Show loading state
+            const button = document.querySelector('.submit-btn');
+            const originalText = button.innerHTML;
+            button.innerHTML = `
+                <svg class="animate-spin" viewBox="0 0 24 24" style="width: 20px; height: 20px; margin-right: 8px;">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Sending...
+            `;
+            button.classList.add('loading');
+
+            // Create book data object
+            const bookData = {
+                title: bookTitle,
+                author: author,
+                category: category,
+                condition: condition,
+                price: price,
+                originalPrice: originalPrice,
+                images: uploadedFiles.map(file => URL.createObjectURL(file)),
+                status: 'pending',
+                listDate: new Date().toISOString()
+            };
+
+            // Get existing books or initialize empty array
+            const userBooks = JSON.parse(localStorage.getItem('userBooks')) || [];
+            
+            // Add new book
+            userBooks.push(bookData);
+            
+            // Update user's books count
+            const userData = JSON.parse(localStorage.getItem('userData')) || {};
+            userData.booksListed = (userData.booksListed || 0) + 1;
+            
+            // Simulate API call
+            setTimeout(() => {
+                try {
+                    // Save to localStorage
+                    localStorage.setItem('userBooks', JSON.stringify(userBooks));
+                    localStorage.setItem('userData', JSON.stringify(userData));
+
+                    // Success state
+                    button.innerHTML = `
+                        <svg style="width: 20px; height: 20px; margin-right: 8px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        Sent Successfully!
+                    `;
+                    button.classList.add('success');
+
+                    // Show only the modal, remove the sliding notification
+                    showSuccessModal();
+
+                    // Reset form and redirect after delay
+                    setTimeout(() => {
+                        // Reset form
+                        document.getElementById('sellBookForm').reset();
+                        imagePreview.innerHTML = '';
+                        uploadedFiles = [];
+                        updateEmptySlots();
+
+                        // Reset button
+                        button.innerHTML = originalText;
+                        button.classList.remove('success');
+                        button.classList.remove('loading');
+
+                        // Redirect to profile page
+                        window.location.href = 'profile.html?status=book-submitted';
+                    }, 2000);
+                } catch (error) {
+                    // Show error notification only for errors
+                    showNotification('An error occurred. Please try again.', 'error');
+                    button.innerHTML = originalText;
+                    button.classList.remove('loading');
+                }
+            }, 1500);
+        }
+
+        // Remove the form submit event listener since we're using the button click
+        document.getElementById('sellBookForm').removeEventListener('submit', function(e) {
+            e.preventDefault();
+        });
+
+        // Add this function for notifications
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <div class="notification-content">
+                    ${type === 'success' 
+                        ? '<svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>'
+                        : '<svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>'
+                    }
+                    <span>${message}</span>
+                </div>
+            `;
+            document.body.appendChild(notification);
+
+            // Remove notification after 3 seconds
+            setTimeout(() => {
+                notification.classList.add('fade-out');
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html> 

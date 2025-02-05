@@ -1,0 +1,1 @@
+remove view all from "Bes Seller " Section and instead of "reviews" show "Recent Bought " number 

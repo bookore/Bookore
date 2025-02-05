@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation - Bookore</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --success: #10b981;
+            --success-dark: #059669;
+            --text-primary: #1f2937;
+            --text-secondary: #64748b;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: 
+                radial-gradient(circle at top right, rgba(37, 99, 235, 0.08), transparent 400px),
+                radial-gradient(circle at bottom left, rgba(139, 92, 246, 0.08), transparent 400px),
+                linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            color: var(--text-primary);
+        }
+
+        .confirmation-container {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.08),
+                0 0 0 1px rgba(255, 255, 255, 0.8);
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .confirmation-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--success), var(--success-dark));
+            border-radius: 24px 24px 0 0;
+        }
+
+        @keyframes slideUp {
+            from { 
+                transform: translateY(40px); 
+                opacity: 0; 
+            }
+            to { 
+                transform: translateY(0); 
+                opacity: 1; 
+            }
+        }
+
+        .success-icon {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, var(--success), var(--success-dark));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2.5rem;
+            box-shadow: 
+                0 0 0 12px rgba(16, 185, 129, 0.1),
+                0 0 60px rgba(16, 185, 129, 0.2);
+            animation: pulse 2s infinite;
+            position: relative;
+        }
+
+        .success-icon::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--success), var(--success-dark));
+            filter: blur(15px);
+            opacity: 0.3;
+            z-index: -1;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .success-icon svg {
+            width: 60px;
+            height: 60px;
+            color: white;
+            animation: checkmark 1s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+            transform-origin: center;
+        }
+
+        @keyframes checkmark {
+            0% { transform: scale(0) rotate(-45deg); opacity: 0; }
+            70% { transform: scale(1.2) rotate(0deg); }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+
+        h1 {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 2.8rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        .order-number {
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 1.2rem;
+            background: rgba(37, 99, 235, 0.08);
+            padding: 0.6rem 1.2rem;
+            border-radius: 20px;
+            display: inline-block;
+            box-shadow: inset 0 2px 4px rgba(37, 99, 235, 0.1);
+        }
+
+        .email-sent {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            margin: 2rem 0;
+            padding: 1rem;
+            background: rgba(37, 99, 235, 0.03);
+            border-radius: 12px;
+        }
+
+        .email-sent svg {
+            width: 20px;
+            height: 20px;
+            color: var(--primary);
+        }
+
+        .order-details {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin: 2.5rem 0;
+            box-shadow: 
+                0 4px 15px rgba(0, 0, 0, 0.03),
+                0 0 0 1px rgba(0, 0, 0, 0.02);
+            text-align: left;
+        }
+
+        .order-details h2 {
+            color: var(--primary-dark);
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .order-details h2 svg {
+            width: 24px;
+            height: 24px;
+            color: var(--primary);
+        }
+
+        #invoicePreview {
+            margin: 2rem 0;
+            padding: 2.5rem;
+            border: 1px solid rgba(37, 99, 235, 0.15);
+            border-radius: 16px;
+            max-height: 500px;
+            overflow-y: auto;
+            background: white;
+            box-shadow: 
+                0 4px 20px rgba(0, 0, 0, 0.03),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+        }
+
+        .buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-top: 3rem;
+        }
+
+        .button {
+            padding: 1.2rem 2.8rem;
+            border-radius: 14px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2);
+        }
+
+        .primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(
+                90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.2), 
+                transparent
+            );
+            transform: skewX(-15deg);
+            transition: 0.5s;
+        }
+
+        .primary:hover::before {
+            left: 100%;
+        }
+
+        .primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
+        }
+
+        .secondary {
+            background: white;
+            color: var(--primary);
+            border: 2px solid #e5e7eb;
+        }
+
+        .secondary:hover {
+            background: #f8fafc;
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .confirmation-container {
+                padding: 2rem;
+                margin: 1rem;
+            }
+
+            .buttons {
+                flex-direction: column;
+            }
+
+            .button {
+                width: 100%;
+                justify-content: center;
+            }
+
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            .success-icon {
+                width: 100px;
+                height: 100px;
+            }
+
+            .success-icon svg {
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        /* Custom scrollbar */
+        #invoicePreview::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #invoicePreview::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 4px;
+        }
+
+        #invoicePreview::-webkit-scrollbar-thumb {
+            background: #94a3b8;
+            border-radius: 4px;
+        }
+
+        #invoicePreview::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+
+        /* Loading animation for PDF generation */
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .animate-spin {
+            animation: spin 1s linear infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="confirmation-container">
+        <div class="success-icon">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+            </svg>
+        </div>
+        <h1>Order Placed Successfully!</h1>
+        <p>Your order number is: <span class="order-number" id="orderNumber"></span></p>
+        
+        <div class="email-sent">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+            </svg>
+            <span>A confirmation email has been sent to <strong id="userEmail" style="color: var(--primary);"></strong></span>
+        </div>
+
+        <div class="order-details">
+            <h2>
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                </svg>
+                Order Summary
+            </h2>
+            <div id="invoicePreview"></div>
+        </div>
+
+        <div class="buttons">
+            <button class="button primary" onclick="downloadInvoice()">
+                <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                        d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+                Download Invoice
+            </button>
+            <a href="index.html" class="button secondary">
+                <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                        d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                </svg>
+                Continue Shopping
+            </a>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="invoice.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Get user data
+            const userData = JSON.parse(localStorage.getItem('userData'));
+            if (userData && userData.email) {
+                document.getElementById('userEmail').textContent = userData.email;
+            }
+
+            // Get order ID from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const orderId = urlParams.get('orderId');
+            
+            if (orderId) {
+                document.getElementById('orderNumber').textContent = orderId;
+                
+                // Get order data from localStorage
+                const userOrders = JSON.parse(localStorage.getItem('userOrders')) || [];
+                const orderData = userOrders.find(order => order.orderId === orderId);
+
+                if (orderData) {
+                    // Generate invoice preview
+                    const invoiceGenerator = new InvoiceGenerator();
+                    const invoiceHTML = invoiceGenerator.generateInvoiceHTML(orderData);
+                    document.getElementById('invoicePreview').innerHTML = invoiceHTML;
+                }
+            }
+        });
+
+        async function downloadInvoice() {
+            const button = document.querySelector('.primary');
+            const originalText = button.innerHTML;
+            
+            try {
+                button.innerHTML = `
+                    <svg class="animate-spin" viewBox="0 0 24 24" style="width: 24px; height: 24px;">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Generating PDF...
+                `;
+                button.disabled = true;
+
+                const urlParams = new URLSearchParams(window.location.search);
+                const orderId = urlParams.get('orderId');
+                
+                if (orderId) {
+                    const userOrders = JSON.parse(localStorage.getItem('userOrders')) || [];
+                    const orderData = userOrders.find(order => order.orderId === orderId);
+
+                    if (orderData) {
+                        const invoiceGenerator = new InvoiceGenerator();
+                        await invoiceGenerator.generatePDF(orderData);
+                    }
+                }
+            } catch (error) {
+                console.error('Error generating PDF:', error);
+                alert('Error generating invoice. Please try again.');
+            } finally {
+                button.innerHTML = originalText;
+                button.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html> 
